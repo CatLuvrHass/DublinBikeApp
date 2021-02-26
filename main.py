@@ -113,7 +113,7 @@ def store(data):
 
 def store2(data):
     try:
-        engine = create_engine(f"mysql+mysqlconnector://hassan:hassan2010@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
+        engine = create_engine(f"mysql+mysqlconnector://credentials.name:credentials.password@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
         metadata2.create_all(engine)
         values2 = list(map(get_stations_dynamic, r.json()))
         engine.execute(available.insert().values(values2))
