@@ -95,7 +95,7 @@ def main():
 
 def store(data):
     try:
-        engine = create_engine(f"mysql+mysqlconnector://hassan:hassan2010@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
+        engine = create_engine(f"mysql+mysqlconnector://credentials.name:credentials.password@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
         dbikes = "dbikes2"
         sql = """CREATE DATABASE IF NOT EXISTS %s;""" % (dbikes)
         engine.execute(sql)
