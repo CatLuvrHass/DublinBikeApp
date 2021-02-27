@@ -14,10 +14,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
-# def get_bike_info():
-    
-#     r = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey""=86e256748a1872c27d81d7f54516d214b19faa8e")
-#     return r.json()
 
 r = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey""=86e256748a1872c27d81d7f54516d214b19faa8e")
 
@@ -44,6 +40,7 @@ available = sqla.Table(
 
 def get_stations_dynamic(obj):
     return {'number': obj['number'],
+            'bike_stands': obj['bike_stands'],
             'available_bike_stands': obj['available_bike_stands'],
             'available_bikes': obj['available_bikes'],
             'last_update': datetime.datetime.now()}
@@ -95,7 +92,7 @@ def main():
 
 def store(data):
     try:
-        engine = create_engine(f"mysql+mysqlconnector://credentials.name:credentials.password@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
+        engine = create_engine(f"mysql+mysqlconnector://hassan:hassan2010@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
         dbikes = "dbikes2"
         sql = """CREATE DATABASE IF NOT EXISTS %s;""" % (dbikes)
         engine.execute(sql)
@@ -113,7 +110,7 @@ def store(data):
 
 def store2(data):
     try:
-        engine = create_engine(f"mysql+mysqlconnector://credentials.name:credentials.password@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
+        engine = create_engine("mysql+mysqlconnector://hassan:hassan2010@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
         metadata2.create_all(engine)
         values2 = list(map(get_stations_dynamic, r.json()))
         engine.execute(available.insert().values(values2))
