@@ -74,10 +74,14 @@ def main():
             name = "Dublin"
             url= "https://api.jcdecaux.com/vls/v1/stations"
 
+            current_time = datetime.datetime.now()
+            filename = 'stations/data_{}.json'.format(current_time).replace(" ","_").replace(":","_")
+
             r = requests.get(url, params={"apiKey":apikey,"contract": name})
 
             """update databases and store information"""
             data = json.loads(r.text)
+            store_data(data, filename)
 
             # write to the database
             store2(data)
@@ -89,7 +93,13 @@ def main():
         
     return
     
-
+# stores the data from request into a json file for back up and other use.
+def store_data(data,filename):
+    '''uploads the data to a json file called data_[X] where X is'''
+    '''the time the json file was pulled from the API'''
+    with open(filename,'w') as f:
+        f.write(str(data))
+    return
 def store(data):
     try:
         engine = create_engine(f"mysql+mysqlconnector://hassan:hassan2010@database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
