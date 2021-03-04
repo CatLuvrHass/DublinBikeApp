@@ -6,12 +6,15 @@ from sqlalchemy import create_engine, Column, Table, Integer, Float, String, Met
 import traceback
 import time
 import datetime
+
 import credentials
+
 
 def main():
         
     while True:
         try:
+
             """information required to access api"""            
             data = weather_data()
             
@@ -32,6 +35,7 @@ metadata3 = sqla.MetaData()
 
 #variable for the weather table and contents data types and columns
 weather = sqla.Table(
+
     'weather',metadata3,
     sqla.Column('id', sqla.Integer),
     sqla.Column('description',sqla.String(128)),
@@ -71,9 +75,11 @@ def weather_data():
     
     return weather_data 
 
+
 # executes insertion of the database objects from sqlalchemy code into their correct table row
 def store3(data):
     try:
+
         URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
         DB = "dbikes1"
         name = credentials.name
