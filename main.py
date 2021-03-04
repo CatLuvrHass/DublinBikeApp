@@ -20,18 +20,21 @@ def main():
     try:
         """information required to access api"""
         apikey = "86e256748a1872c27d81d7f54516d214b19faa8e"
+        #also f570f2a1ccb689ea7b7ba8a4f9129743ed853448 is available
         name = "Dublin"
         url= "https://api.jcdecaux.com/vls/v1/stations"
         r = requests.get(url, params={"apiKey":apikey,"contract": name})
         data = json.loads(r.text)
         
-        """Uplaod station data to database"""
-        store(r)
-        
         """Store the inital data in Json file"""
         current_time = datetime.datetime.now()
         filename = 'data_{}.json'.format(current_time).replace(" ","_").replace(":","_")
         store_data_json(data,filename)
+        
+        """Uplaod station data to database"""
+        store(r)
+        store2(r)
+        time.sleep(5*60)
         
     except:
         print(traceback.format_exc())
@@ -42,15 +45,18 @@ def main():
             apikey = "86e256748a1872c27d81d7f54516d214b19faa8e"
             name = "Dublin"
             url= "https://api.jcdecaux.com/vls/v1/stations"
-
-
             r = requests.get(url, params={"apiKey":apikey,"contract": name})
-
+            
             """update databases and store information"""
             data = json.loads(r.text)
+            
+            """Store the inital data in Json file"""
+            current_time = datetime.datetime.now()
+            filename = 'data_{}.json'.format(current_time).replace(" ","_").replace(":","_")
+            store_data_json(data,filename)
 
             # write to the database
-            store2(data)
+            store2(r)
         
             time.sleep(5*60)
         
@@ -59,17 +65,12 @@ def main():
         
     return
 
+
 def store_data_json(data,filename):
     '''uploads the data to a json file called data_[X] where X is the time the json file was pulled from the API'''
     with open(filename,'w') as f:
         f.write(str(data))
     return
-
-"""information required to access api"""
-apikey = "86e256748a1872c27d81d7f54516d214b19faa8e"
-name = "Dublin"
-url= "https://api.jcdecaux.com/vls/v1/stations"
-r = requests.get(url, params={"apiKey":apikey,"contract": name})
 
 #returns values in sqlachemy object for static table
 def get_station(obj):
@@ -88,33 +89,8 @@ def get_availability(obj):
             'available_bikes': obj['available_bikes'],
             'last_update': datetime.datetime.now()}
 
-def get_weather(obj):
-    return {'id': obj['weather'][0]['id'],
-            'description': obj['weather'][0]['main'],
-            'temp': obj['main']['temp'],
-            'temp_max': obj['main']['temp_max'],
-            'temp_min': obj['main']['temp_min'],
-            'pressure': obj['main']['pressure'],
-            'humidity': obj['main']['humidity'],
-            'last_update': datetime.datetime.now()}
-
-
-def weather_data():
-    '''Uses open weather API to get current weather'''
-    url = 'http://api.openweathermap.org/data/2.5/weather?q=Rathfarnham&appid=59134ab26e3f2ded62e1e2b6e3c08c21'
-
-    r = requests.get(url)
-    weather_data = r.json()
-    
-    """store weather data in json file"""
-    current_time = datetime.datetime.now()
-    filename = 'weather_data_{}.json'.format(current_time).replace(" ","_").replace(":","_")
-    store_data_json(weather_data,filename)
-    
-    return weather_data 
-
 #function to execute storage of data into db for static table
-def store(data):
+def store(r):
     try:
         URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
         DB = "dbikes1"
@@ -140,7 +116,7 @@ def store(data):
         print(traceback.format_exc())
 
 #function to execute storage of data into db for static table
-def store2(data):
+def store2(r):
     try:
         '''Store availability data'''
         URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
@@ -157,10 +133,6 @@ def store2(data):
         metadata.create_all(engine)
         values2 = list(map(get_availability, r.json()))
         engine.execute(available.insert().values(values2))
-        
-        '''Store weather data'''
-        engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name,pw,URI,DB),echo=True)
-        engine.execute(weather.insert().values(get_weather(weather_data())))
         
         
     except:
@@ -189,16 +161,4 @@ available = sqla.Table(
         sqla.Column('available_bikes', sqla.Integer),
         sqla.Column('last_update', sqla.DateTime))
 
-'''Weather table'''
-weather = sqla.Table(
-    'weather',metadata,
-    sqla.Column('id', sqla.Integer),
-    sqla.Column('description',sqla.String(128)),
-    sqla.Column('temp',sqla.REAL),
-    sqla.Column('temp_max', sqla.REAL),
-    sqla.Column('temp_min', sqla.REAL),
-    sqla.Column('pressure', sqla.Integer),
-    sqla.Column('humidity', sqla.Integer),
-    sqla.Column('last_update', sqla.DateTime))
-     
 main()
