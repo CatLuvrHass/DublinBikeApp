@@ -7,45 +7,27 @@ import traceback
 import time
 import datetime
 
+import credentials
+
+
 def main():
         
     while True:
         try:
-            """information required to access api"""
+
+            """information required to access api"""            
+            data = weather_data()
             
-            current_time = datetime.datetime.now()
-            filename = 'weather/data_{}.json'.format(current_time).replace(" ","_").replace(":","_")
-            
-            r = requests.get("http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/207931?"
-                    "apikey=v2rvAk3IOWSchHBBKSuZCdSVwMsBW6q0&language=en&details=true&metric=true")
-            
-            """store information in json files in directory"""
-            data = json.loads(r.text)
-            store_data(data,filename)
-            
-            #write a store function into sql database.
+            """Store data in database"""
             store3(data)
             
-            
-            #make request every 2hours
-            time.sleep(60*2)
+            #make request every hour
+            time.sleep(60*60)
             
 
-            
         except:
             print(traceback.format_exc())
             
-    return
-
-r = requests.get("http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/207931?"
-                 "apikey=v2rvAk3IOWSchHBBKSuZCdSVwMsBW6q0&language=en&details=true&metric=true")
-
-# stores the data from request into a json file for back up and other use.
-def store_data(data,filename):
-    '''uploads the data to a json file called data_[X] where X is'''
-    '''the time the json file was pulled from the API'''
-    with open(filename,'w') as f:
-        f.write(str(data))
     return
 
 # create table for weather data with sqlalchemy
@@ -53,39 +35,61 @@ metadata3 = sqla.MetaData()
 
 #variable for the weather table and contents data types and columns
 weather = sqla.Table(
-    'forecast', metadata3,
-    sqla.Column('IconPhrase', sqla.String(128)),
-    sqla.Column('HasPrecipitation', sqla.String(128)),
-    sqla.Column('IsDaylight', sqla.String(128)),
-    sqla.Column('Temperature_value', sqla.String(128)),
-    sqla.Column('Temperature_units', sqla.String(128)),
-    sqla.Column('RealFeelTemperature', sqla.String(128)),
-    sqla.Column('RealFeelTemperature_units', sqla.String(128)),
-    sqla.Column('last_update', sqla.DateTime)
-)
+
+    'weather',metadata3,
+    sqla.Column('id', sqla.Integer),
+    sqla.Column('description',sqla.String(128)),
+    sqla.Column('temp',sqla.REAL),
+    sqla.Column('temp_max', sqla.REAL),
+    sqla.Column('temp_min', sqla.REAL),
+    sqla.Column('feels_like',sqla.REAL),
+    sqla.Column('wind_speed',sqla.REAL),
+    sqla.Column('sun_rise', sqla.DateTime),
+    sqla.Column('sun_set', sqla.DateTime),
+    sqla.Column('pressure', sqla.Integer),
+    sqla.Column('humidity', sqla.Integer),
+    sqla.Column('last_update', sqla.DateTime))
 
 #function that returns objects from the json file as database values that fit 
 #into corresponding data base column
-def weather_to_db(obj):
-    """update the stations table and populate it with """
-    return{'IconPhrase': obj['IconPhrase'],
-           'HasPrecipitation': obj['HasPrecipitation'],
-           'IsDaylight': obj['IsDaylight'],
-           'Temperature_value': obj['Temperature']['Value'],
-           'Temperature_units': obj['Temperature']['Unit'],
-           'RealFeelTemperature': obj['RealFeelTemperature']['Value'],
-           'RealFeelTemperature_units': obj['RealFeelTemperature']['Unit'],
-           'last_update': obj['DateTime']
-          }
+def get_weather(obj):
+    return {'id': obj['weather'][0]['id'],
+            'description': obj['weather'][0]['main'],
+            'temp': obj['main']['temp'],
+            'temp_max': obj['main']['temp_max'],
+            'temp_min': obj['main']['temp_min'],
+            'feels_like': obj['main']['feels_like'],
+            'wind_speed': obj['wind']['speed'],
+            'sun_rise': datetime.datetime.fromtimestamp(obj['sys']['sunrise']),
+            'sun_set': datetime.datetime.fromtimestamp(obj['sys']['sunset']),
+            'pressure': obj['main']['pressure'],
+            'humidity': obj['main']['humidity'],
+            'last_update': datetime.datetime.now()}
+
+def weather_data():
+    '''Uses open weather API to get current weather'''
+    url = 'http://api.openweathermap.org/data/2.5/weather?q=Rathfarnham&units=metric&appid=59134ab26e3f2ded62e1e2b6e3c08c21'
+
+    r = requests.get(url)
+    weather_data = r.json()
+    
+    return weather_data 
+
 
 # executes insertion of the database objects from sqlalchemy code into their correct table row
 def store3(data):
     try:
-        engine = create_engine(f"mysql+mysqlconnector://hassan:hassan2010@"
-                "database-1.c8vtobqomn0w.us-east-1.rds.amazonaws.com:3306/dbikes2", echo=True)
+
+        URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
+        DB = "dbikes1"
+        name = credentials.name
+        pw = credentials.password
+
+        """Initate connection"""
+        engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name,pw,URI,DB),echo=True)
         metadata3.create_all(engine)
-        values3 = list(map(weather_to_db, r.json()))
-        engine.execute(weather.insert().values(values3))
+        engine.execute(weather.insert().values(get_weather(data)))
+       
     except:
         print(traceback.format_exc())
 
