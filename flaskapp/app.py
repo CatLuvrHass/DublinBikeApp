@@ -17,19 +17,20 @@ def index():
 
 @app.route("/stations")
 def stations():
-    engine = create_engine(f"mysql+mysqlconnector://{dbinfo.USER}:{dbinfo.PASS}@{dbinfo.DBURI}:3306/{dbinfo.DBNAME}", echo=True)
-    df = pd.read_sql_table("stations", engine)
-    #results = engine.execute("select * from stations")
-    #print([res for res in results])
-    #print(df.head())
-    return df.to_json(orient='records')
+    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
+    DB = "dbikes1"
+    name = dbinfo.USER
+    pw = dbinfo.PASS
+    engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name,pw,URI,DB),echo=True)
+    join = """SELECT s.number, s.name, s.address,s.pos_lat,s.pos_lng,a.available_bike_stands, a.available_bikes, a.last_update
+        FROM stations s 
+        JOIN availability a ON (a.number = s.number)
+        ORDER BY a.last_update desc LIMIT 200
+        """
+    df = pd.read_sql_query(join, engine)
+    dfn = df.drop_duplicates(subset=['number'])
 
-@app.route("/availability")
-def availability():
-    engine = create_engine(f"mysql+mysqlconnector://{dbinfo.USER}:{dbinfo.PASS}@{dbinfo.DBURI}:3306/{dbinfo.DBNAME}", echo=True)
-    df = pd.read_sql_table("availability", engine)
-    sql = 'select '
-
+    return dfn.to_json(orient='records')
 
 if __name__ == '__main__':
-   app.run(debug=True)
+    app.run(debug=True)
