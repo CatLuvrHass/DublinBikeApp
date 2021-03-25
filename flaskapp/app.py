@@ -24,5 +24,12 @@ def stations():
     #print(df.head())
     return df.to_json(orient='records')
 
+@app.route("/availability")
+def availability():
+    engine = create_engine(f"mysql+mysqlconnector://{dbinfo.USER}:{dbinfo.PASS}@{dbinfo.DBURI}:3306/{dbinfo.DBNAME}", echo=True)
+    df = pd.read_sql_table("availability", engine)
+    sql = 'select '
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+   app.run(debug=True)
