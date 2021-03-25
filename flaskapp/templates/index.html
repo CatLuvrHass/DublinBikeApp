@@ -2,61 +2,21 @@
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Flask app</title>
-  <meta name="description" content="first index.html">
-  <meta name="author" content="Handsomecatlovers">
-  <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <title>Flask app</title>
+    <meta name="description" content="first index.html">
+    <meta name="author" content="Handsomecatlovers">
+    <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css">
+        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
 
 <body>
-<script>
-
-let map;
-
-function initMap() {
-
-    fetch("/stations").then(response => {
-        return response.json();
 
 
-    }).then(data => {
-        console.log("data: ", data);
-
-    map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: 53.349804, lng: -6.260310},
-      zoom: 12,
-    });
-
-    data.forEach(stations => {
-        const marker = new google.maps.Marker({
-            position: { lat: stations.pos_lat, lng: stations.pos_lng },
-            map: map,
-
-        });
-
-        marker.addListener("click", () => {
-            const infowindow = new google.maps.InfoWindow({
-
-                content: '<h3>'+stations.name+'</h3><p> Available Stands: '+stations.available_bike_stands+
-                '<br>Available Bikes: '+stations.available_bikes+'</p>',
-
-            });
-            infowindow.open(map,marker);
-        });
-    });
-
-    }).catch(err => {
-      console.log("OOPS!", err);
-    });
-}
-
-
-</script>
+<div id="header"></div>
 <div id="map"></div>
-
-
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
