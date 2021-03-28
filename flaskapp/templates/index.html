@@ -2,26 +2,125 @@
 
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Flask app</title>
-    <meta name="description" content="first index.html">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Dublin Bikes</title>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <meta name="author" content="Handsomecatlovers">
-    <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename= 'reset.css') }}" rel="stylesheet" type="text/css" href="static/reset.css">
+    <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
 
 <body>
+<header>
+    <div class="wrapper">
+        <h1>Simply<span class="color">.</span></h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Blog</a></li>
+            </ul>
+
+        </nav>
+    </div>
+</header>
+
+<div id="hero-image">
+    <div class="wrapper">
+        <h2><strong>A Minimal, clean</strong><br/>
+        layout for web design.</h2>
+        <a href="#" class="button-1">Get Started</a>
+    </div>
+</div>
+<div id="features">
+    <div class="wrapper">
+        <ul>
+            <li class="feature-1">
+                <h4>Easy to Edit</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mollis turpis ac libero interdum, id fringilla purus feugiat. Etiam malesuada mattis nibh at bibendum.</p>
+            </li>
+            <li class="feature-2">
+                <h4>Layered PSD</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mollis turpis ac libero interdum, id fringilla purus feugiat. Etiam malesuada mattis nibh at bibendum.</p>
+            </li>
+            <li class="feature-3">
+                <h4>Ready to Go</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mollis turpis ac libero interdum, id fringilla purus feugiat. Etiam malesuada mattis nibh at bibendum.</p>
+            </li>
+            <div class="clear"></div>
+        </ul>
+    </div>
+</div>
+
+<div class="wrapper">
+     <div id="floating-panel">
+      <b>Start: </b>
+      <select id="start">
+        <option value="chicago, il">Chicago</option>
+      </select>
+      <b>End: </b>
+      <select id="end">
+        <option value="chicago, il">Chicago</option>
+      </select>
+    </div>
+<div id="map">
+</div>
+
+    <div id="cta">
+    <div class="wrapper">
+        <h3>Heard Enough?</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod leo a nibh dignissim tincidunt. Nam ultricies odio ac neque suscipit volutpat. Ut dictum adipiscing felis sed malesuada. Integer porta sem nec nibh hendrerit imperdiet. </p>
+        <a href="#" class="button-2">Get Started</a>
+    </div>
+</div>
+</div>
+    <footer>
+    <div class="wrapper">
+        <div id="footer-info">
+            <p>Copyright 2014 CompanyName. All rights reserved.</p>
+            <p><a href="#">Terms of Service</a> I <a href="#">Privacy</a></p>
+        </div>
+        <div id="footer-links">
+            <ul>
+                <li><h5>Company</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>Company</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>Company</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+</footer>
 
 
-<div id="header"></div>
-<div id="map"></div>
-
-    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
       async
     ></script>
+
 </body>
 </html>
