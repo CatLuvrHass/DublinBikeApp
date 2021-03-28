@@ -7,7 +7,7 @@ function initMap() {
 
 
     }).then(data => {
-        console.log("data: ", data);
+        //console.log("data: ", data);
 
     map = new google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.349804, lng: -6.260310},
@@ -62,5 +62,51 @@ function initMap() {
     }).catch(err => {
       console.log("OOPS!", err);
     });
+}
+
+//Weather
+//SELECT ELEMENTS
+const iconElement = document.querySelector(".weather-icon");
+const tempElement = document.querySelector(".temperature-value p");
+const descElement = document.querySelector(".temperature-description p");
+const locationElement = document.querySelector(".location p");
+//const notificationElement = document.querySelector(".notification");
+//const windSpeedElement = document.querySelector(".notification");
+
+//APP DATA
+//const weather = {};
+//weather.temperature = {
+//   unit: "celsius"
+//}
+
+
+//Get weather from API
+function getWeather(){
+
+     fetch("/weather").then(response => {
+         let weatherData = response.json();
+         return weatherData;
+     })
+         .then(function(weatherData){
+             let temperature = weatherData.temp;
+             let description = weatherData.description;
+             let iconId = weatherData.icon;
+             let windSpeed = weatherData.wind_speed;
+         })
+         .then(function(){
+             displayWeather();
+             console.log(weatherData);
+         })
+}
+
+//DISPLAY WEATHER TO UI
+function displayWeather(){
+    //iconElement.innerHTML = `<img src="icons/${weather.iconId}.png"/>`;
+    //tempElement.innerHTML = `${weather.temperature.value}°<span>C</span>`;
+    //descElement.innerHTML = weather.description;
+    //locationElement.innerHTML = "Dublin";
+    descElement.innerHTML = description;
+
+
 }
 
