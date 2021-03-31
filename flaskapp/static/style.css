@@ -140,17 +140,18 @@ header nav ul li a {
     width: 300px;
     padding-top: 140px;
     float: left;
-    margin-right: 10px;
+    margin-right: 25px;
+    margin-left: 35px;
     text-align: center;
 }
 #features ul li.feature-1 {
-    background: url('images/tree.jpg') no-repeat top center;
+    background: url('images/tree.jpg.png') no-repeat top center;
 }
 #features ul li.feature-2 {
-    background: url('images/madman.jpg') no-repeat top center;
+    background: url('images/madman.jpg.png') no-repeat top center;
 }
 #features ul li.feature-3 {
-    background: url('images/dervish.jpg') no-repeat top center;
+    background: url('images/dervish.jpg.png') no-repeat top center;
 }
 #floating-panel {
   position: relative;
@@ -211,4 +212,34 @@ footer {
 }
 #footer-links ul li {
     margin: 10px 0;
+}
+/*style for the map route page*/
+#right-panel {
+    font-family: "Roboto", "sans-serif";
+    line-height: 30px;
+    padding-left: 10px;
+}
+
+#right-panel select,
+#right-panel input {
+    font-size: 15px;
+}
+
+#right-panel select {
+    width: 200px;
+}
+
+#right-panel i {
+    font-size: 12px;
+}
+
+#right-panel {
+    float: right;
+    width: 34%;
+    height: 80%;
+}
+
+.panel {
+    height: 100%;
+    overflow: auto;
 }

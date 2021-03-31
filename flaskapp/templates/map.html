@@ -12,69 +12,53 @@
     <meta name="author" content="Handsomecatlovers">
     <link href="{{ url_for('static', filename= 'reset.css') }}" rel="stylesheet" type="text/css" href="static/reset.css">
     <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
-        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <style type="text/css">
-      #right-panel {
-        font-family: "Roboto", "sans-serif";
-        line-height: 30px;
-        padding-left: 10px;
-      }
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js%22%3E"></script>
+    <script type="text/javascript">
+        let map;
+        function initCharts() {
+            google.charts.load('current',{'packages':['corechart']});
+            google.charts.setOnLoadCallback(initMap);
+        }
+        function initMap() {
 
-      #right-panel select,
-      #right-panel input {
-        font-size: 15px;
-      }
-
-      #right-panel select {
-        width: 100%;
-      }
-
-      #right-panel i {
-        font-size: 12px;
-      }
-
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      #map {
-        height: 100%;
-        float: left;
-        width: 63%;
-        height: 100%;
-      }
-
-      #right-panel {
-        float: right;
-        width: 34%;
-        height: 100%;
-      }
-
-      .panel {
-        height: 100%;
-        overflow: auto;
-      }
-    </style>
-    <script>
-      function initMap() {
           fetch("/stations").then(response => {
             return response.json();
 
 
-            }).then(data => {
+          }).then(data => {
             console.log("data: ", data);
 
             map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: 53.349804, lng: -6.260310},
             zoom: 14,
             });
+            var colour = "green";
+            var occupy = 'a';
+            data.forEach(stations => {
+                console.log(occupy);
+                const marker = new google.maps.Marker({
+                    position: { lat: stations.pos_lat, lng: stations.pos_lng },
+                    map: map,
 
+                    icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"}
+            });
+                marker.addListener("click", () => {
+                    const infowindow = new google.maps.InfoWindow({
+
+                    content: '<h3 style="color:black;">'+stations.name+'</h3>' +
+                        '<p style="color:black;"> Available Stands: '
+                        +stations.available_bike_stands+
+                        '<br>Available Bikes: '
+                        +stations.available_bikes+'</p>',
+                    });
+                    infowindow.open(map,marker);
+                    drawOccupancyWeekly(stations.number,stations.name);
+                });
+            });
+
+            const bikeLayer = new google.maps.BicyclingLayer();
+            bikeLayer.setMap(map);
             const directionsService = new google.maps.DirectionsService();
             const directionsRenderer = new google.maps.DirectionsRenderer({
                 draggable: true,
@@ -82,58 +66,78 @@
                 panel: document.getElementById("right-panel"),
             });
             directionsRenderer.addListener("directions_changed", () => {
-                computeTotalDistance(directionsRenderer.getDirections());
+                computeTotalDistance(directionsRenderer.getDirections())
             });
             displayRoute(
-                "Rathmines, Dublin, Ireland",
+                "Ringsend, Dublin, Ireland",
                 "Stonebatter, Dublin, Ireland",
                 directionsService,
                 directionsRenderer
-        );
-            }).catch(err => {
+            );
+
+          }).catch(err => {
                 console.log("OOPS!", err);
+          });
+
+        }
+        function drawOccupancyWeekly(station_number,name){
+            fetch("/occupancy/"+station_number).then(response => {
+                return response.json();
+            }).then(data => {
+                console.log(data);
+                var options = {
+                    title: "Bikes Currently Available at  "+name+""
+                }
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                var chart_data = new google.visualization.DataTable();
+                chart_data.addColumn('datetime',"Date");
+                chart_data.addColumn('number', "Bike Availability");
+                data.forEach(y => {
+                    chart_data.addRow([new Date(y.last_update),y.available_bikes]);
+                })
+                chart.draw(chart_data, options);
             });
-      }
-
-      function displayRoute(origin, destination, service, display) {
-        service.route(
-          {
-            origin: origin,
-            destination: destination,
-
-            travelMode: google.maps.TravelMode.DRIVING,
-            avoidTolls: true,
-          },
-          (result, status) => {
-            if (status === "OK" && result) {
-              display.setDirections(result);
-            } else {
-              alert("Could not display directions due to: " + status);
+        }
+        function displayRoute(origin, destination, service, display) {
+            service.route(
+                {
+                    origin: origin,
+                    destination: destination,
+                    waypoints: [
+                        { location: "Merrion Square, Dublin, Ireland" },
+                        { location: "The Huge Lane, Dublin, Ireland" },
+                    ],
+                    travelMode: google.maps.TravelMode.BICYCLING,
+                },
+                (result, status) => {
+                    if (status === "OK" && result) {
+                        display.setDirections(result);
+                    } else {
+                        alert("Could not display directions due to: " + status);
+                    }
+                }
+                );
+        }
+        function computeTotalDistance(result) {
+            let total = 0;
+            const myroute = result.routes[0];
+            if (!myroute) {
+                return;
             }
-          }
-        );
-      }
 
-      function computeTotalDistance(result) {
-        let total = 0;
-        const myroute = result.routes[0];
-
-        if (!myroute) {
-          return;
+            for (let i = 0; i < myroute.legs.length; i++) {
+                total += myroute.legs[i].distance.value;
+            }
+            total = total / 1000;
+            document.getElementById("total").innerHTML = total + " km";
         }
 
-        for (let i = 0; i < myroute.legs.length; i++) {
-          total += myroute.legs[i].distance.value;
-        }
-        total = total / 1000;
-        document.getElementById("total").innerHTML = total + " km";
-      }
     </script>
   </head>
   <body>
   <header>
     <div class="wrapper">
-        <h1>Simply<span class="color">.</span></h1>
+        <h1>D<span class="color">.</span>Bois</h1>
         <nav>
             <ul>
                 <li><a href="http://127.0.0.1:5000/">Home</a></li>
@@ -143,18 +147,26 @@
         </nav>
     </div>
 </header>
-    <div id="map"></div>
-    <div id="right-panel">
-      <p>Total Distance: <span id="total"></span></p>
-    </div>
+  <div id="chart_div"></div>
 
-        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
-      async
-    ></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=53.349804,-6.260310&radius=500&types=food&name=harbour&key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap"
-  type="text/javascript"></script>
+  <div class="wrapper">
+      <div id="map"></div>
+      <div id="right-panel">
+          <p>Total Distance: <span id="total"></span></p>
+      </div>
+  </div>
+
+
+
+
+  <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+  <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
+          async
+  ></script>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=53.349804,-6.260310&radius=500&types=food&name=harbour&key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap"
+          type="text/javascript"></script>
 
   </body>
 </html>

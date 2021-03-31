@@ -11,7 +11,7 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.349804, lng: -6.260310},
-      zoom: 13,
+      zoom: 14,
     });
 
     data.forEach(stations => {

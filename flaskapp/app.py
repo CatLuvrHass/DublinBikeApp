@@ -44,5 +44,23 @@ def stations():
     return dfn.to_json(orient='records')
 
 
+@app.route("/occupancy/<int:station_id>")
+@lru_cache()
+def occupancy(station_id):
+    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
+    DB = "dbikes1"
+    name = dbinfo.USER
+    pw = dbinfo.PASS
+    engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name, pw, URI, DB), echo=True)
+    sel = """SELECT a.number, a.last_update, a.available_bike_stands, a.available_bikes
+    FROM availability a 
+    where a.number = {}
+    """.format(station_id)
+    df = pd.read_sql_query(sel, engine)
+    # res_df = df.set_index('last_update').resample('d1').mean()
+    # res_df['last_update'] = res_df.index
+    return df.to_json(orient='records')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
