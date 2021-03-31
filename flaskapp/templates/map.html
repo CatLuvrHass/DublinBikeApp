@@ -1,39 +1,160 @@
+<!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"type="text/javascript" charset="utf-8"></script>
-<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"type="text/javascript" charset="utf-8"></script>
-</head>
+  <head>
+    <title>Draggable Directions</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Dublin Bikes</title>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <meta name="author" content="Handsomecatlovers">
+    <link href="{{ url_for('static', filename= 'reset.css') }}" rel="stylesheet" type="text/css" href="static/reset.css">
+    <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
+        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
-<body style='margin: 0'>
-<div style="width: 100%; height: 100%" id="mapContainer"></div>
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style type="text/css">
+      #right-panel {
+        font-family: "Roboto", "sans-serif";
+        line-height: 30px;
+        padding-left: 10px;
+      }
 
-<script>
-      // Initialize the platform object:
-      var platform = new H.service.Platform({
-        'apikey': 'AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk'
-      });
+      #right-panel select,
+      #right-panel input {
+        font-size: 15px;
+      }
 
-	   const lat = 22.719568;
-	   const long = 75.857727;
+      #right-panel select {
+        width: 100%;
+      }
 
-	// Obtain the default map types from the platform object
-      var maptypes = platform.createDefaultLayers();
+      #right-panel i {
+        font-size: 12px;
+      }
 
-      // Instantiate (and display) a map object:
-      var map = new H.Map(
-        document.getElementById('mapContainer'),
-        maptypes.vector.normal.map,
-        {
-          zoom: 10,
-          center: { lat: lat, lng: long }
-        });
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
 
-	var marker = new H.map.Marker({ lat: lat, lng: long });
+      #map {
+        height: 100%;
+        float: left;
+        width: 63%;
+        height: 100%;
+      }
 
-	// Add the marker to the map:
-	map.addObject(marker);
+      #right-panel {
+        float: right;
+        width: 34%;
+        height: 100%;
+      }
 
-</script>
-</body>
+      .panel {
+        height: 100%;
+        overflow: auto;
+      }
+    </style>
+    <script>
+      function initMap() {
+          fetch("/stations").then(response => {
+            return response.json();
+
+
+            }).then(data => {
+            console.log("data: ", data);
+
+            map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 53.349804, lng: -6.260310},
+            zoom: 14,
+            });
+
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer({
+                draggable: true,
+                map,
+                panel: document.getElementById("right-panel"),
+            });
+            directionsRenderer.addListener("directions_changed", () => {
+                computeTotalDistance(directionsRenderer.getDirections());
+            });
+            displayRoute(
+                "Rathmines, Dublin, Ireland",
+                "Stonebatter, Dublin, Ireland",
+                directionsService,
+                directionsRenderer
+        );
+            }).catch(err => {
+                console.log("OOPS!", err);
+            });
+      }
+
+      function displayRoute(origin, destination, service, display) {
+        service.route(
+          {
+            origin: origin,
+            destination: destination,
+
+            travelMode: google.maps.TravelMode.DRIVING,
+            avoidTolls: true,
+          },
+          (result, status) => {
+            if (status === "OK" && result) {
+              display.setDirections(result);
+            } else {
+              alert("Could not display directions due to: " + status);
+            }
+          }
+        );
+      }
+
+      function computeTotalDistance(result) {
+        let total = 0;
+        const myroute = result.routes[0];
+
+        if (!myroute) {
+          return;
+        }
+
+        for (let i = 0; i < myroute.legs.length; i++) {
+          total += myroute.legs[i].distance.value;
+        }
+        total = total / 1000;
+        document.getElementById("total").innerHTML = total + " km";
+      }
+    </script>
+  </head>
+  <body>
+  <header>
+    <div class="wrapper">
+        <h1>Simply<span class="color">.</span></h1>
+        <nav>
+            <ul>
+                <li><a href="http://127.0.0.1:5000/">Home</a></li>
+                <li><a href="http://127.0.0.1:5000/map">Route Map</a></li>
+            </ul>
+
+        </nav>
+    </div>
+</header>
+    <div id="map"></div>
+    <div id="right-panel">
+      <p>Total Distance: <span id="total"></span></p>
+    </div>
+
+        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=53.349804,-6.260310&radius=500&types=food&name=harbour&key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap"
+  type="text/javascript"></script>
+
+  </body>
 </html>
