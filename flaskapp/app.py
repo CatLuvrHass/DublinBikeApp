@@ -21,7 +21,6 @@ def index():
 #    return render_template('map.html')
 
 @app.route("/stations")
-@lru_cache()
 def stations():
     URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
     DB = "dbikes1"

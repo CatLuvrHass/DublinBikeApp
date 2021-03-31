@@ -2,8 +2,8 @@ let map;
 let another;
 function initMap() {
 
-    const directionsService = new google.maps.DirectionsService();
-    const directionsRenderer = new google.maps.DirectionsRenderer();
+    // const directionsService = new google.maps.DirectionsService();
+    // const directionsRenderer = new google.maps.DirectionsRenderer();
 
     fetch("/stations").then(response => {
         return response.json();
@@ -16,7 +16,8 @@ function initMap() {
       center: { lat: 53.349804, lng: -6.260310},
       zoom: 14,
     });
-    //
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer();
     directionsRenderer.setMap(map);
 
     const onChangeHandler = function () {
@@ -43,33 +44,15 @@ function initMap() {
             infowindow.open(map,marker);
 
         });
-        marker.addListener("click", function(){
-            directionsService.route({
-                origin: {
-                    lat: stations.pos_lat,
-                    lng: stations.pos_lng
-                },
-                destination: {
-                    lat: stations.pos_lat,
-                    lng: stations.pos_lng
-                },
-                travelMode: 'DRIVING'
-            }, function(response, status){
-                if (status === 'OK'){
-                    directionsDisplay.setDirections(response);
-                }else{
-                    window.alert('Directions request failed due to ' + status);
-                }
 
-            });
-        });
+    });
 
-    // citySelect();
+    citySelect();
 
     }).catch(err => {
       console.log("OOPS!", err);
     });
-});
+}
 
 
 function calculateAndDisplayRoute(directionsService, directionsRenderer) {
@@ -107,14 +90,13 @@ function citySelect(){
                 const stationLatLng = { lat: post_lat, lng: post_lng };
                 console.log(stationLatLng);
                 start_ele.innerHTML = start_ele.innerHTML +
-                '<option value="' + station.name + '">' + station.name + '</option>';
+                '<option value="' + station.name + ", Dublin, Ireland" + '">' + station.name + '</option>';
                 end_ele.innerHTML = end_ele.innerHTML +
-                '<option value="' +  station.name+ '">' + station.name + '</option>';
+                '<option value="' +  station.name+ ", Dublin, Ireland" + '">' + station.name + '</option>';
                 const selectedStation = document.getElementById("start");
                 console.log(selectedStation);
         //
         // console.log(station.name);
     });
     });
-}
 }
