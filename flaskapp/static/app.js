@@ -7,29 +7,57 @@ function initMap() {
 
 
     }).then(data => {
-        console.log("data: ", data);
+        //console.log("data: ", data);
 
     map = new google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.349804, lng: -6.260310},
-      zoom: 14,
+      zoom: 13,
     });
 
     data.forEach(stations => {
+        if(stations.available_bikes > 0){
+            let cityCircleAvail = new google.maps.Circle({
+              strokeColor: "#00CC00",
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: "#00CC00",
+              fillOpacity: 0.35,
+              map,
+              center: { lat: stations.pos_lat, lng: stations.pos_lng },
+              radius: 50,
+        });}
+        else {
+            let cityCircleNotAvail = new google.maps.Circle({
+              strokeColor: "#FF0000",
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: "#FF0000",
+              fillOpacity: 0.35,
+              map,
+              center: { lat: stations.pos_lat, lng: stations.pos_lng },
+              radius: 50,
+            });
+        }
+
         const marker = new google.maps.Marker({
             position: { lat: stations.pos_lat, lng: stations.pos_lng },
             map: map,
 
+
         });
+
 
         marker.addListener("click", () => {
             const infowindow = new google.maps.InfoWindow({
 
                 content: '<h3>'+stations.name+'</h3><p> Available Stands: '+stations.available_bike_stands+
-                '<br>Available Bikes: '+stations.available_bikes+'</p>',
+                '<br>Available Bikes: '+stations.available_bikes+'</p>' + "hellllloo",
 
             });
             infowindow.open(map,marker);
         });
+
+
     });
 
     }).catch(err => {
