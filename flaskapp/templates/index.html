@@ -15,9 +15,12 @@
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+
 </head>
 
 <body>
+
+
 <header>
     <div class="wrapper">
         <h1>Simply<span class="color">.</span></h1>
@@ -57,6 +60,7 @@
             </li>
             <div class="clear"></div>
         </ul>
+
     </div>
 </div>
 
@@ -64,11 +68,11 @@
      <div id="floating-panel">
       <b>Start: </b>
       <select id="start">
-        <option value="chicago, il">Chicago</option>
+        <option value=""></option>
       </select>
       <b>End: </b>
       <select id="end">
-        <option value="chicago, il">Chicago</option>
+        <option value=""></option>
       </select>
     </div>
 <div id="map">
@@ -121,6 +125,7 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
       async
     ></script>
+
 
 </body>
 </html>
