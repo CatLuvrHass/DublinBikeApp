@@ -46,7 +46,6 @@ function initMap() {
 
         });
 
-
         marker.addListener("click", () => {
             const infowindow = new google.maps.InfoWindow({
 
