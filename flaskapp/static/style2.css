@@ -149,13 +149,13 @@ footer {
 
 #map {
     float: left;
-    width: 1200px;
+    width: 1000px;
     height: 650px;
 }
 
 #right-panel {
     float: right;
-    width: 400px;
+    width: 430px;
     height: 650px;
 }
 
@@ -168,5 +168,5 @@ footer {
     display: flex;
     margin: 0 auto;
     padding: 0 10px;
-    width: 1600px;
+    width: 1450px;
 }

@@ -25,8 +25,19 @@ function initMap() {
               map,
               center: { lat: stations.pos_lat, lng: stations.pos_lng },
               radius: 50,
-        });}
-        else {
+        });
+        } else if(stations.available_bikes < 5){
+            let cityCircleAlmost = new google.maps.Circle({
+              strokeColor: "#ffa500",
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: "#ffa500",
+              fillOpacity: 0.35,
+              map,
+              center: { lat: stations.pos_lat, lng: stations.pos_lng },
+              radius: 50,
+            });
+        } else {
             let cityCircleNotAvail = new google.maps.Circle({
               strokeColor: "#FF0000",
               strokeOpacity: 0.8,

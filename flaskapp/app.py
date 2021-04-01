@@ -57,7 +57,7 @@ def occupancy(station_id):
     where a.number = {}
     """.format(station_id)
     df = pd.read_sql_query(sel, engine)
-    # res_df = df.set_index('last_update').resample('d1').mean()
+    # res_df = df.set_index('last_update').resample('1d').mean()
     # res_df['last_update'] = res_df.index
     return df.to_json(orient='records')
 
