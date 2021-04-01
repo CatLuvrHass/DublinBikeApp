@@ -90,6 +90,7 @@
                 }
                 var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
                 var chart_data = new google.visualization.DataTable();
+
                 chart_data.addColumn('datetime',"Date");
                 chart_data.addColumn('number', "Bike Availability");
                 data.forEach(y => {
@@ -149,7 +150,7 @@
 </header>
 
   <div id="chart_div"></div>
-  <div class="wrapper">
+
   <div class="flex-container">
 
   <div class="flex-child magenta">
@@ -162,7 +163,6 @@
   </div>
   </div>
   </div>
-      </div>
 
   </div>
 
