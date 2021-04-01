@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -7,10 +6,9 @@
     <meta name="description" content="first index.html">
     <meta name="author" content="Handsomecatlovers">
     <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../static/font/Rimouski.css">
      <!-- <link rel="stylesheet" href="font/Rimouski.css"> -->
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
 
 <body>
@@ -23,13 +21,21 @@
     <div class="notification"></div>
     <div class="weather-container">
         <div class="weather-icon">
-           <!-- <img src="icons/unknown.png" alt=""> -->
+          <img src="../static/icons/unknown.png" height="128" width="128" alt="">
         </div>
         <div class="temperature-value"><p>- °<span>C</span></p></div>
         <div class="temperature-description"><p> - </p></div>
         <div class="location"><p>-</p></div>
     </div>
 </div>
+
+<div id="weather">
+    <div id="description"></div>
+    <h1 id="temp"></h1>
+    <div id="location"></div>
+  </div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
