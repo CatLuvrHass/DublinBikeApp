@@ -50,7 +50,7 @@ function initMap() {
             const infowindow = new google.maps.InfoWindow({
 
                 content: '<h3>'+stations.name+'</h3><p> Available Stands: '+stations.available_bike_stands+
-                '<br>Available Bikes: '+stations.available_bikes+'</p>' + "hellllloo",
+                '<br>Available Bikes: '+stations.available_bikes+'</p>',
 
             });
             infowindow.open(map,marker);
@@ -63,4 +63,3 @@ function initMap() {
       console.log("OOPS!", err);
     });
 }
-
