@@ -11,9 +11,9 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <meta name="author" content="Handsomecatlovers">
     <link href="{{ url_for('static', filename= 'reset.css') }}" rel="stylesheet" type="text/css" href="static/reset.css">
-    <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js%22%3E"></script>
+    <link href="{{ url_for('static', filename= 'style2.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         let map;
         function initCharts() {
@@ -147,26 +147,66 @@
         </nav>
     </div>
 </header>
-  <div id="chart_div"></div>
+    <div id="chart_div"></div>
+  <div class="flex-container">
 
-  <div class="wrapper">
-      <div id="map"></div>
-      <div id="right-panel">
-          <p>Total Distance: <span id="total"></span></p>
-      </div>
+  <div class="flex-child magenta">
+    <div id="map"></div>
   </div>
 
+  <div class="flex-child green">
+      <div id="right-panel" class="panel">
+      <p>Total Distance: <span id="total"></span></p>
+  </div>
+  </div>
+  </div>
+
+  </div>
+
+<footer>
+    <div class="wrapper">
+        <div id="footer-info">
+            <p>Copyright 2014 CompanyName. All rights reserved.</p>
+            <p><a href="#">Terms of Service</a> I <a href="#">Privacy</a></p>
+        </div>
+        <div id="footer-links">
+            <ul>
+                <li><h5>Company</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>Company</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>Company</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+</footer>
 
 
 
   <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-  <script
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
+    <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initCharts&libraries=&v=weekly"
           async
   ></script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=53.349804,-6.260310&radius=500&types=food&name=harbour&key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap"
           type="text/javascript"></script>
+
 
   </body>
 </html>
