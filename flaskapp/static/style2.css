@@ -77,6 +77,11 @@ small {
 .wrapper {
     margin: 0 auto;
     padding: 0 10px;
+    width: 1900px;
+}
+.wrapper2 {
+    margin: 0 auto;
+    padding: 0 10px;
     width: 1100px;
 }
 
@@ -107,43 +112,7 @@ header nav ul li a {
     display: block;
     margin-right: 20px;
 }
-.button-1 {
-    display: block;
-    text-align: center;
-    background: #444;
-    border-radius: 3px;
-    color: #fff;
-    width: 180px;
-    height: 50px;
-    font-size: 20px;
-    line-height: 50px;
-    margin: 0 auto;
-}
-.button-1:hover {
-    background-color: #02b8dd;
-    color: #fff;
-}
 
-#features ul {
-    margin: 80px 0;
-}
-#features ul li {
-    width: 300px;
-    padding-top: 140px;
-    float: left;
-    margin-right: 25px;
-    margin-left: 35px;
-    text-align: center;
-}
-#features ul li.feature-1 {
-    background: url('images/tree.jpg.png') no-repeat top center;
-}
-#features ul li.feature-2 {
-    background: url('images/madman.jpg.png') no-repeat top center;
-}
-#features ul li.feature-3 {
-    background: url('images/dervish.jpg.png') no-repeat top center;
-}
 footer {
     padding: 60px 0;
     background-color: #f8fafa;
@@ -179,7 +148,7 @@ footer {
 }
 
 #right-panel select {
-    width: 1100px;
+    width: 600px;
 }
 
 #right-panel i {
