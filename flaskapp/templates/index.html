@@ -4,9 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Dublin Bikes</title>
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
     <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <meta name="author" content="Handsomecatlovers">
@@ -15,9 +12,12 @@
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+
 </head>
 
 <body>
+
+
 <header>
     <div class="wrapper">
         <h1>D<span class="color">.</span>Bois</h1>
@@ -55,21 +55,24 @@
             </li>
             <div class="clear"></div>
         </ul>
+
     </div>
 </div>
 
 <div class="wrapper">
      <div id="floating-panel">
+         <h2>location map</h2>
+         <p id="location-info">hey there at: </p>
       <b>Start: </b>
       <select id="start">
-        <option value="">Dublin, Ireland</option>
+        <option value=""></option>
       </select>
       <b>End: </b>
       <select id="end">
-        <option value="">Dublin, Ireland</option>
+        <option value=""></option>
       </select>
     </div>
-<div id="map">
+    <div id="map">map should appear here</div>
 </div>
 
     <div id="cta">
@@ -79,7 +82,7 @@
         <a href="http://127.0.0.1:5000/map" class="button-2">Get Started</a>
     </div>
 </div>
-</div>
+
     <footer>
     <div class="wrapper">
         <div id="footer-info">
@@ -115,7 +118,7 @@
 
 
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
+<script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
       async
     ></script>
