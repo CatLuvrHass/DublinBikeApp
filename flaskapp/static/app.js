@@ -21,10 +21,10 @@ function initMap() {
             var opt = document.createElement("option");
 
             opt.value= [pos.lat, pos.lng];
-            opt.innerHTML = "mee";
+            opt.innerHTML = "User's Current Location";
 
             originDropDown.add(opt);
-            console.log(pos.lng);
+            // console.log(pos.lng);
         });
 
     const directionsService = new google.maps.DirectionsService();
