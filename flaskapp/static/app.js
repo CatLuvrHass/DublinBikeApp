@@ -15,7 +15,7 @@ function initMap() {
     });
 
     data.forEach(stations => {
-        if(stations.available_bikes > 0){
+        if(stations.available_bikes > 5){
             let cityCircleAvail = new google.maps.Circle({
               strokeColor: "#00CC00",
               strokeOpacity: 0.8,
@@ -26,7 +26,7 @@ function initMap() {
               center: { lat: stations.pos_lat, lng: stations.pos_lng },
               radius: 50,
         });
-        } else if(stations.available_bikes < 5){
+        } else if(stations.available_bikes <= 5 && stations.available_bikes > 0){
             let cityCircleAlmost = new google.maps.Circle({
               strokeColor: "#ffa500",
               strokeOpacity: 0.8,
