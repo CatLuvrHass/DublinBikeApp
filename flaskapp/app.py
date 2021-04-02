@@ -16,17 +16,10 @@ def index():
     return render_template("index.html")
 
 
-<<<<<<< HEAD
 @app.route('/map')
 def map():
     return render_template("map.html")
 
-
-=======
->>>>>>> menu
-# @app.route('/')
-# def map_func():
-#    return render_template('map.html')
 
 @app.route("/stations")
 @lru_cache()
@@ -47,7 +40,6 @@ def stations():
     return dfn.to_json(orient='records')
 
 
-<<<<<<< HEAD
 @app.route("/occupancy/<int:station_id>")
 @lru_cache()
 def occupancy(station_id):
@@ -66,7 +58,5 @@ def occupancy(station_id):
     return df.to_json(orient='records')
 
 
-=======
->>>>>>> menu
 if __name__ == '__main__':
     app.run(debug=True)
