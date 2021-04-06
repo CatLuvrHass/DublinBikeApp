@@ -58,5 +58,21 @@ def occupancy(station_id):
     return df.to_json(orient='records')
 
 
+@app.route("/weather")
+def weather():
+    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
+    DB = "dbikes1"
+    name = dbinfo.USER
+    pw = dbinfo.PASS
+    engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name, pw, URI, DB), echo=True)
+    sql = """ SELECT *
+                FROM dbikes1.weather
+                WHERE last_update = (SELECT 
+                MAX(last_update)
+                FROM dbikes1.weather)
+                 """
+    df = pd.read_sql_query(sql, engine)
+    return df.to_json(orient='records')
+
 if __name__ == '__main__':
     app.run(debug=True)

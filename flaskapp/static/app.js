@@ -145,4 +145,61 @@ function citySelect(){
                 originDropDown.add(opt);
     });
     });
+
+
+}
+
+
+//Weather
+//SELECT ELEMENTS
+const iconElement = document.querySelector(".weather-icon");
+const tempElement = document.querySelector(".temperature-value");
+const descElement = document.querySelector(".temperature-description");
+
+const locationElement = document.querySelector(".location");
+const notificationElement = document.querySelector(".notification");
+const windSpeedElement = document.querySelector(".notification");
+
+//APP DATA
+const weather = {};
+weather.temperature = {
+   unit: "celsius"
+}
+
+
+//Get weather from API
+//window.onload = function getWeather(){
+function weatherBallon(){
+
+     fetch("/weather").then(response => {
+         let weatherData =  response.json();
+         return weatherData;
+     })
+         .then(function(weatherData){
+              weather.temperature = weatherData[0].temp;
+             weather.description = weatherData[0].description;
+            weather.iconId = weatherData[0].icon;
+             weather.windSpeed = weatherData[0].wind_speed;
+             console.log(weatherData);
+         })
+         .then(function(weatherData){
+             displayWeather();
+          //   console.log(weatherData);
+         })
+}
+window.onload = function() {
+    weatherBallon();
+}
+
+
+
+//DISPLAY WEATHER TO UI
+function displayWeather() {
+    iconElement.innerHTML = `<img src="../static/icons/${weather.iconId}.png"/>`;
+    tempElement.innerHTML = `${weather.temperature}°<span>C</span>`;
+    descElement.innerHTML = weather.description;
+    locationElement.innerHTML = "Dublin";
+    descElement.innerHTML = weather.description;
+
+
 }
