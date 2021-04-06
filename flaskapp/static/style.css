@@ -247,9 +247,7 @@ footer {
     overflow: auto;
 }
 
-#map {
-  height: 90%;
-}
+
 /* Optional: Makes the sample page fill the window. */
 html,
 body {
