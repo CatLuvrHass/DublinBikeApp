@@ -9,6 +9,7 @@
     <meta name="author" content="Handsomecatlovers">
     <link href="{{ url_for('static', filename= 'reset.css') }}" rel="stylesheet" type="text/css" href="static/reset.css">
     <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
+     <link rel="stylesheet" href="../static/font/Rimouski.css">
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
@@ -58,6 +59,21 @@
 
     </div>
 </div>
+
+<div class="container">
+    <div class="app-title"><p>Weather</p></div>
+    <div class="notification"></div>
+    <div class="weather-container">
+        <div class="weather-icon">
+          <img src="../static/icons/unknown.png" height="128" width="128" alt="">
+        </div>
+        <div class="temperature-value"><p>- °<span>C</span></p></div>
+        <div class="temperature-description"><p> - </p></div>
+        <div class="location"><p>-</p></div>
+    </div>
+</div>
+
+
 
 <div class="wrapper">
      <div id="floating-panel">
