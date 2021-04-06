@@ -157,7 +157,7 @@ const tempElement = document.querySelector(".temperature-value");
 const descElement = document.querySelector(".temperature-description");
 
 const locationElement = document.querySelector(".location");
-const notificationElement = document.querySelector(".notification");
+//const notificationElement = document.querySelector(".notification");
 const windSpeedElement = document.querySelector(".notification");
 
 //APP DATA
