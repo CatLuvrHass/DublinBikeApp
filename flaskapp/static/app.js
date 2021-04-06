@@ -17,6 +17,7 @@ function initMap() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
             };
+
             var originDropDown = document.getElementById("start");
             var opt = document.createElement("option");
 
@@ -124,14 +125,19 @@ function citySelect(){
 
     const start_ele = document.getElementById('start');
     const end_ele = document.getElementById('end');
-    fetch("/stations").then(result => {
+    fetch("/stationList").then(result => {
         return result.json();
     }).then(another => {
         // console.log("anotherone: ", another);
             another.forEach(station =>{
+                // var Names=[];
+                // Names.push(station.name);
+                // console.log(Names);
+                // stationName.sort( (a, b) => a.localeCompare(b, 'eng', {ignorePunctuation: true}));
 
                 var originDropDown = document.getElementById("start");
                 var opt = document.createElement("option");
+
                 opt.value= [station.pos_lat,station.pos_lng];
                 opt.innerHTML = station.name;
 
