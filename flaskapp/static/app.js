@@ -157,7 +157,7 @@ const tempElement = document.querySelector(".temperature-value");
 const descElement = document.querySelector(".temperature-description");
 
 const locationElement = document.querySelector(".location");
-//const notificationElement = document.querySelector(".notification");
+const notificationElement = document.querySelector(".notification");
 const windSpeedElement = document.querySelector(".notification");
 
 //APP DATA
@@ -180,7 +180,7 @@ function weatherBallon(){
              weather.description = weatherData[0].description;
             weather.iconId = weatherData[0].icon;
              weather.windSpeed = weatherData[0].wind_speed;
-             console.log(weatherData);
+             //console.log(weatherData);
          })
          .then(function(weatherData){
              displayWeather();
@@ -195,7 +195,7 @@ window.onload = function() {
 
 //DISPLAY WEATHER TO UI
 function displayWeather() {
-    iconElement.innerHTML = `<img src="../static/icons/${weather.iconId}.png"/>`;
+    iconElement.innerHTML = `<img src="/static/icons/${weather.iconId}.png"/>`;
     tempElement.innerHTML = `${weather.temperature}°<span>C</span>`;
     descElement.innerHTML = weather.description;
     locationElement.innerHTML = "Dublin";
@@ -203,3 +203,6 @@ function displayWeather() {
 
 
 }
+
+
+

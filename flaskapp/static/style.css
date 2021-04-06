@@ -147,9 +147,12 @@ header nav ul li a {
 #features ul li.feature-1 {
     background: url('images/tree.jpg.png') no-repeat top center;
 }
+
 #features ul li.feature-2 {
     background: url('images/madman.jpg.png') no-repeat top center;
-}
+ }
+
+
 #features ul li.feature-3 {
     background: url('images/dervish.jpg.png') no-repeat top center;
 }
@@ -257,12 +260,11 @@ body {
 
 /*CSS code for the weather */
 
-
+/*CSS code for the weather */
 
 *{
     font-family: "Rimouski";
 }
-
 
 
 .container{
@@ -355,7 +357,6 @@ body {
 }
 
 
-
 .location{
     margin: 0;
     padding: 0;
@@ -363,7 +364,6 @@ body {
     text-align: center;
     font-size: 0.8em;
 }
-
 
 
 
