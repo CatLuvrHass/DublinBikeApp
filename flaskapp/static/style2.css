@@ -98,6 +98,17 @@ header nav ul li a {
     display: block;
     margin-right: 20px;
 }
+#cta {
+    padding: 60px 0;
+    text-align: center;
+}
+#cta h3 {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 400px;
+    border-bottom: 1px solid #F08080;
+    padding: 0 0 20px 0;
+}
 
 footer {
     padding: 60px 0;
