@@ -40,6 +40,23 @@ def stations():
     return dfn.to_json(orient='records')
 
 
+@app.route("/stationList")
+@lru_cache()
+def stations2():
+    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
+    DB = "dbikes1"
+    name = dbinfo.USER
+    pw = dbinfo.PASS
+    engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name, pw, URI, DB), echo=True)
+    join = """SELECT number, name, stations.pos_lat, stations.pos_lng
+    FROM dbikes1.stations 
+    order by name ASC"""
+    df2 = pd.read_sql_query(join, engine)
+    # dfr = df.drop_duplicates(subset=['number'])
+
+    return df2.to_json(orient='records')
+
+
 @app.route("/occupancy/<int:station_id>")
 @lru_cache()
 def occupancy(station_id):

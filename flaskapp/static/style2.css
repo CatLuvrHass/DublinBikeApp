@@ -57,15 +57,10 @@ a {
     color: #444;
 }
 a:hover {
-    color: #02b8dd;
+    color: #F08080;
 }
 strong {
     font-weight: bold;
-}
-small {
-    font-size: 13px;
-    color: #777;
-    font-style: italic;
 }
 .clear {
     clear: both;
@@ -85,7 +80,7 @@ header h1 {
     margin-bottom: 32px;
 }
 header h1 .color {
-    color: #02b8dd;
+    color: #F08080;
 }
 header nav {
     float: right;
@@ -102,6 +97,17 @@ header nav ul li a {
     font-weight: bold;
     display: block;
     margin-right: 20px;
+}
+#cta {
+    padding: 60px 0;
+    text-align: center;
+}
+#cta h3 {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 400px;
+    border-bottom: 1px solid #F08080;
+    padding: 0 0 20px 0;
 }
 
 footer {
