@@ -94,7 +94,7 @@ small {
   font-weight: 700;
   color: #444;
   line-height: 1.3;
-  padding: .6em 1.4em .5em .8em;
+  padding: .3em .3em .3em .3em;
   width: 100%;
   max-width: 100%; /* useful when width is set to anything other than 100% */
   box-sizing: border-box;
@@ -218,7 +218,7 @@ header nav ul li a {
 }
 #features ul li {
     width: 300px;
-    padding-top: 140px;
+    padding-top: 300px;
     float: left;
     margin-right: 25px;
     margin-left: 35px;
@@ -228,25 +228,24 @@ header nav ul li a {
     background: url('images/tree.jpg.png') no-repeat top center;
 }
 
-#features ul li.feature-2 {
-    background: url('images/madman.jpg.png') no-repeat top center;
- }
+/*#features ul li.feature-2 {*/
+/*    background: url('images/madman.jpg.png') no-repeat top center;*/
+/* }*/
 
 
 #features ul li.feature-3 {
     background: url('images/dervish.jpg.png') no-repeat top center;
 }
 #floating-panel {
-  position: relative;
-  top: 10px;
-  z-index: 5;
-  background-color: #fff;
-  padding: 15px;
-  border: 1px solid #999;
-  text-align: center;
-  font-family: "Roboto", "sans-serif";
-  line-height: 30px;
-  padding-left: 10px;
+    position: relative;
+    top: 9px;
+    z-index: 5;
+    background-color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-family: "Roboto", "sans-serif";
+    line-height: 30px;
+    padding-left: 10px;
 }
 
 
@@ -342,15 +341,12 @@ footer {
 }
 
 
-.container{
+.container {
     width: 300px;
-    background-color: #FFF;
-
-    display: block;
+    background-color: #F08080;
     margin: 0 auto;
-
     border-radius: 10px;
-    padding-bottom : 50px;
+    padding-bottom: 50px;
 }
 
 .app-title{
@@ -380,10 +376,10 @@ footer {
     padding: 10px 0;
 }
 
-.weather-container{
+.weather-container {
     width: 300px;
     height: 260px;
-    background-color: #F4F9FF;
+    background-color: #fff;
 }
 
 .weather-icon{
@@ -440,7 +436,6 @@ footer {
     font-size: 0.8em;
 }
 
-
 /*code for round corners of div*/
 #rcorners2 {
     border-radius: 25px;
@@ -449,4 +444,3 @@ footer {
     width: 200px;
     height: 150px;
 }
-
