@@ -10,7 +10,9 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
       center: { lat: 53.349804, lng: -6.260310},
       zoom: 14,
+
     });
+
     navigator.geolocation.getCurrentPosition(
         (position) => {
             const pos = {
@@ -78,6 +80,7 @@ function initMap() {
         const marker = new google.maps.Marker({
             position: { lat: stations.pos_lat, lng: stations.pos_lng },
             map: map,
+            icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"}
 
 
         });
