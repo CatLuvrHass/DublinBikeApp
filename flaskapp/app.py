@@ -1,5 +1,7 @@
+import pickle
 from functools import lru_cache
 
+import requests
 from flask import Flask, render_template
 from jinja2 import Template
 from sqlalchemy import create_engine
@@ -7,6 +9,10 @@ import dbinfo
 from mysql import connector
 import mysql.connector
 import pandas as pd
+import time
+import requests
+import datetime as dt
+import calendar
 
 app = Flask(__name__, template_folder='templates')
 
@@ -90,6 +96,60 @@ def weather():
                  """
     df = pd.read_sql_query(sql, engine)
     return df.to_json(orient='records')
+
+
+with open('model.pkl', 'rb') as handle:
+    model = pickle.load(handle)
+
+
+def get_day(date):
+    # returns an interger between 0 and 6 depending on what day it is
+    d = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
+
+    day = calendar.day_name[dt.datetime.strptime(date, '%Y-%M-%d').weekday() - 1]
+
+    return d[day]
+
+
+@app.route("/stationList/<int:date>")
+def weather_predict_data(date):
+    # gets weather predictions for the next week, as well as the day as an int (see above)
+    '''Uses open weather API to get current weather'''
+    url = 'https://api.openweathermap.org/data/2.5/onecall?lat=53.3498&lon=6.2603&exclude=hourly&appid=59134ab26e3f2ded62e1e2b6e3c08c21&units=metric'
+
+    r = requests.get(url)
+    weather_data = r.json()['daily']
+
+    # default results (if maing call outside of 1 week)
+    dic = {'t': 0, 'h': 0, 'd': 0}
+
+    for i in weather_data:
+        if (dt.datetime.utcfromtimestamp(i["dt"]).strftime('%Y-%m-%d') == date):
+            t = i['temp']['day']
+            h = i['humidity']
+            date_str = dt.datetime.utcfromtimestamp(i["dt"]).strftime('%Y-%m-%d')
+            d = get_day(date_str)
+
+            dic = {'t': t, 'h': h, 'd': d}
+            break
+    return dic
+
+
+# weather_data = weather_predict_data("2021-04-16")
+# print(weather_data)
+
+
+@app.route("/stationList/<int:station_id>/<int:hour>")
+def model(station_id, hour, dic):
+    with open('model.pkl', 'rb') as handle:
+        models = pickle.load(handle)
+    inter = models[station_id][1]
+    coef = models[station_id][2]
+    result = inter + (hour * coef[0]) + (dic['d'] * coef[1]) + (dic['h'] * coef[2]) + (
+            dic['t'] * coef[3])
+
+    return result  # A float which we display.
+
 
 if __name__ == '__main__':
     app.run(debug=True)
