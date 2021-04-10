@@ -13,6 +13,9 @@ import time
 import requests
 import datetime as dt
 import calendar
+import weather_predict
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
 app = Flask(__name__, template_folder='templates')
 
@@ -107,47 +110,23 @@ def get_day(date):
     return d[day]
 
 
-@app.route("/weatherDic/<int:date>")
-def weather_predict_data(date):
-    # gets weather predictions for the next week, as well as the day as an int (see above)
-    '''Uses open weather API to get current weather'''
-    url = 'https://api.openweathermap.org/data/2.5/onecall?lat=53.3498&lon=6.2603&exclude=hourly&appid=59134ab26e3f2ded62e1e2b6e3c08c21&units=metric'
-
-    r = requests.get(url)
-    weather_data = r.json()['daily']
-
-    # default results (if maing call outside of 1 week)
-    dic = {'t': 0, 'h': 0, 'd': 0}
-
-    for i in weather_data:
-        if (dt.datetime.utcfromtimestamp(i["dt"]).strftime('%Y-%m-%d') == date):
-            t = i['temp']['day']
-            h = i['humidity']
-            date_str = dt.datetime.utcfromtimestamp(i["dt"]).strftime('%Y-%m-%d')
-            d = get_day(date_str)
-
-            dic = {'t': t, 'h': h, 'd': d}
-            break
-    return dic
-
-
-# weather_data = weather_predict_data("2021-04-16")
-# print(weather_data)
-
-
 @app.route("/st/<int:number>")
-def model(number):
+def model(number, time=16, date="2021-04-16"):
+    # import model from pickle file. NOTE: number and time are ints, and date is a string
     pickle_in = open("models.pkl", "rb")
     models = pickle.load(pickle_in)
+    model = models[number][0]
 
-    hour = 12
-    dic = {'t': 12, 'humid': 80, 'd': 3}
-    inter = models[number][1]
-    coef = models[number][0]
-    result = inter + (hour * coef[0]) + (dic['d'] * coef[1]) + (dic['humid'] * coef[2]) + (
-            dic['t'] * coef[3])
+    # compute bikes available at this time
+    dic = weather_predict.weather_predict_data(date)
+    result = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
+    result = result[0]
 
-    return str(result)  # A float which we display.
+    # ensures prediction cannot be negitive
+    if result <= 0:
+        result = 0
+
+    return str(int(result))
 
 
 if __name__ == '__main__':
