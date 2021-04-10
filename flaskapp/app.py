@@ -98,10 +98,6 @@ def weather():
     return df.to_json(orient='records')
 
 
-with open('model.pkl', 'rb') as handle:
-    model = pickle.load(handle)
-
-
 def get_day(date):
     # returns an interger between 0 and 6 depending on what day it is
     d = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
@@ -111,7 +107,7 @@ def get_day(date):
     return d[day]
 
 
-@app.route("/stationList/<int:date>")
+@app.route("/weatherDic/<int:date>")
 def weather_predict_data(date):
     # gets weather predictions for the next week, as well as the day as an int (see above)
     '''Uses open weather API to get current weather'''
@@ -139,16 +135,19 @@ def weather_predict_data(date):
 # print(weather_data)
 
 
-@app.route("/stationList/<int:station_id>/<int:hour>")
-def model(station_id, hour, dic):
-    with open('model.pkl', 'rb') as handle:
-        models = pickle.load(handle)
-    inter = models[station_id][1]
-    coef = models[station_id][2]
-    result = inter + (hour * coef[0]) + (dic['d'] * coef[1]) + (dic['h'] * coef[2]) + (
+@app.route("/st/<int:number>")
+def model(number):
+    pickle_in = open("models.pkl", "rb")
+    models = pickle.load(pickle_in)
+
+    hour = 12
+    dic = {'t': 12, 'humid': 80, 'd': 3}
+    inter = models[number][1]
+    coef = models[number][0]
+    result = inter + (hour * coef[0]) + (dic['d'] * coef[1]) + (dic['humid'] * coef[2]) + (
             dic['t'] * coef[3])
 
-    return result  # A float which we display.
+    return str(result)  # A float which we display.
 
 
 if __name__ == '__main__':
