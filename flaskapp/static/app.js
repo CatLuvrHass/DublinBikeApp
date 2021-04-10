@@ -80,7 +80,7 @@ function initMap() {
         const marker = new google.maps.Marker({
             position: { lat: stations.pos_lat, lng: stations.pos_lng },
             map: map,
-            icon: {url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"}
+            icon: {url: "http://maps.google.com/mapfiles/ms/icons/pink-dot.png"}
 
 
         });
