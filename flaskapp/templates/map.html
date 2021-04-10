@@ -1,39 +1,223 @@
+<!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"type="text/javascript" charset="utf-8"></script>
-<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"type="text/javascript" charset="utf-8"></script>
-</head>
+  <head>
+    <title>Dublin Bikes</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Dublin Bikes</title>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <meta name="author" content="Handsomecatlovers">
+    <link href="{{ url_for('static', filename= 'reset.css') }}" rel="stylesheet" type="text/css" href="static/reset.css">
+    <link href="{{ url_for('static', filename= 'style2.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        let map;
+        function initCharts() {
+            google.charts.load('current',{'packages':['corechart']});
+            google.charts.setOnLoadCallback(initMap);
+        }
+        function initMap() {
 
-<body style='margin: 0'>
-<div style="width: 100%; height: 100%" id="mapContainer"></div>
+          fetch("/stations").then(response => {
+            return response.json();
 
-<script>
-      // Initialize the platform object:
-      var platform = new H.service.Platform({
-        'apikey': 'AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk'
-      });
 
-	   const lat = 22.719568;
-	   const long = 75.857727;
+          }).then(data => {
+            console.log("data: ", data);
 
-	// Obtain the default map types from the platform object
-      var maptypes = platform.createDefaultLayers();
+            map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 53.349804, lng: -6.260310},
+            zoom: 14,
+            });
+            var colour = "pink";
+            var occupy = 'p';
+            data.forEach(stations => {
+                console.log(occupy);
+                const marker = new google.maps.Marker({
+                    position: { lat: stations.pos_lat, lng: stations.pos_lng },
+                    map: map,
 
-      // Instantiate (and display) a map object:
-      var map = new H.Map(
-        document.getElementById('mapContainer'),
-        maptypes.vector.normal.map,
-        {
-          zoom: 10,
-          center: { lat: lat, lng: long }
-        });
+                    icon: {url: "http://maps.google.com/mapfiles/ms/icons/pink-dot.png"}
+            });
+                marker.addListener("click", () => {
+                    const infowindow = new google.maps.InfoWindow({
 
-	var marker = new H.map.Marker({ lat: lat, lng: long });
+                    content: '<h3 style="color:black;">'+stations.name+'</h3>' +
+                        '<p style="color:black;"> Available Stands: '
+                        +stations.available_bike_stands+
+                        '<br>Available Bikes: '
+                        +stations.available_bikes+'</p>',
+                    });
+                    infowindow.open(map,marker);
+                    drawOccupancyWeekly(stations.number,stations.name);
+                });
+            });
 
-	// Add the marker to the map:
-	map.addObject(marker);
+            const bikeLayer = new google.maps.BicyclingLayer();
+            bikeLayer.setMap(map);
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer({
+                draggable: true,
+                map,
+                panel: document.getElementById("right-panel"),
+            });
+            directionsRenderer.addListener("directions_changed", () => {
+                computeTotalDistance(directionsRenderer.getDirections())
+            });
+            displayRoute(
+                "Ringsend, Dublin, Ireland",
+                "Stonebatter, Dublin, Ireland",
+                directionsService,
+                directionsRenderer
+            );
 
-</script>
-</body>
+          }).catch(err => {
+                console.log("OOPS!", err);
+          });
+
+        }
+        function drawOccupancyWeekly(station_number,name){
+            fetch("/occupancy/"+station_number).then(response => {
+                return response.json();
+            }).then(data => {
+                console.log(data);
+                var options = {
+                    title: "Bikes Currently Available at  "+name+""
+                }
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                var chart_data = new google.visualization.DataTable();
+
+                chart_data.addColumn('datetime',"Date");
+                chart_data.addColumn('number', "Bike Availability");
+                data.forEach(y => {
+                    chart_data.addRow([new Date(y.last_update),y.available_bikes]);
+                })
+                chart.draw(chart_data, options);
+            });
+        }
+        function displayRoute(origin, destination, service, display) {
+            service.route(
+                {
+                    origin: origin,
+                    destination: destination,
+                    waypoints: [
+                        { location: "Merrion Square, Dublin, Ireland" },
+                        { location: "The Huge Lane, Dublin, Ireland" },
+                    ],
+                    travelMode: google.maps.TravelMode.BICYCLING,
+                },
+                (result, status) => {
+                    if (status === "OK" && result) {
+                        display.setDirections(result);
+                    } else {
+                        alert("Could not display directions due to: " + status);
+                    }
+                }
+                );
+        }
+        function computeTotalDistance(result) {
+            let total = 0;
+            const myroute = result.routes[0];
+            if (!myroute) {
+                return;
+            }
+
+            for (let i = 0; i < myroute.legs.length; i++) {
+                total += myroute.legs[i].distance.value;
+            }
+            total = total / 1000;
+            document.getElementById("total").innerHTML = total + " km";
+        }
+
+    </script>
+  </head>
+  <body>
+  <header>
+    <div class="wrapper">
+        <h1>H<span class="color">.</span>C<span class="color">.</span>Lovers</h1>
+        <nav>
+            <ul>
+                <li><a href="http://127.0.0.1:5000/">Home</a></li>
+                <li><a href="http://127.0.0.1:5000/map">Route Map</a></li>
+            </ul>
+
+        </nav>
+    </div>
+</header>
+
+
+
+  <div class="flex-container">
+
+  <div class="flex-child magenta">
+    <div id="map"></div>
+  </div>
+
+  <div id="rcorners2" class="flex-child green">
+      <div id="right-panel" class="panel">
+      <h4>Total Distance: <span id="total"></span></h4>
+  </div>
+  </div>
+
+  </div>
+        <div id="chart_div"></div>
+  </div>
+
+  <div id="cta">
+    <div class="wrapper">
+        <h3>Are you planning ahead?</h3>
+        <p>Click on the markers to view usual usage of the station. Choose a day and time to plan a route for a trip with your mates in our beautiful Dublin. </p>
+    </div>
+  </div>
+
+ <footer>
+    <div class="wrapper">
+        <div id="footer-info">
+            <p>Copyright 2021 D.Bois. All rights reserved.</p>
+            <p><a href="#">Terms of Service</a> I <a href="#">Privacy</a></p>
+        </div>
+        <div id="footer-links">
+            <ul>
+                <li><h5>D.Bois</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>H.C.Luvrs</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>1.9.9.5</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+</footer>
+
+
+
+  <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initCharts&libraries=&v=weekly"
+          async
+  ></script>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=53.349804,-6.260310&radius=500&types=food&name=harbour&key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap"
+          type="text/javascript"></script>
+
+
+  </body>
 </html>
