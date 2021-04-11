@@ -146,6 +146,5 @@ def model():
 #     return render_template('predict.html', data=usr)
     # return f"<h1>{usr}</h1>"
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+     app.run(host='0.0.0.0',port=8080)
