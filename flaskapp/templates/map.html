@@ -132,6 +132,30 @@
             total = total / 1000;
             document.getElementById("total").innerHTML = total + " km";
         }
+                // function stationSelect(){
+        //
+        //     fetch("/stationList").then(result => {
+        //         return result.json();
+        //     }).then(another => {
+        //         // console.log("stations: ", another);
+        //     another.forEach(station =>{
+        //         // var Names=[];
+        //         // Names.push(station.name);
+        //         // console.log(Names);
+        //         // stationName.sort( (a, b) => a.localeCompare(b, 'eng', {ignorePunctuation: true}));
+        //
+        //         var originDropDown = document.getElementById("stations");
+        //         var opt = document.createElement("option");
+        //
+        //         opt.value= station.number;
+        //         // console.log(station.number);
+        //         opt.innerHTML = station.name;
+        //
+        //         originDropDown.add(opt);
+        //         });
+        //
+        //     });
+        // }
 
     </script>
   </head>
@@ -171,25 +195,37 @@
     <div class="wrapper">
         <h3>Are you planning ahead?</h3>
         <p>Click on the markers to view usual usage of the station. Choose a day and time to plan a route for a trip with your mates in our beautiful Dublin. </p>
+<!--        document.getElementById("stations").addEventListener("change", station);-->
+
+<!--            document.getElementById("day").addEventListener("change", station);-->
+<!--            <select id="stations"></select>-->
+<!--        <option value="">Select a station</option>-->
+        <form method="POST" action="{{url_for('model')}}">
+<!--            station: <input type=number name="station" min="2" max="100"><br>-->
+        <label for="date">date:</label>
+            <input type="date" id="date" name="date">
+        hour: <input type=number name="hour" min="0" max="23"><br>
+        <input type=submit value="predict">
+        </form>
+
+        <!--        <select id="dates"></select>-->
+<!--        <option value="">Select a date</option>-->
+
+<!--        <select id="months"></select>-->
+
+<!--        <select id="years"></select>-->
     </div>
   </div>
 
  <footer>
     <div class="wrapper">
         <div id="footer-info">
-            <p>Copyright 2021 D.Bois. All rights reserved.</p>
+            <p>Copyright 2021 H.C.Lovers. All rights reserved.</p>
             <p><a href="#">Terms of Service</a> I <a href="#">Privacy</a></p>
         </div>
         <div id="footer-links">
             <ul>
-                <li><h5>D.Bois</h5></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Meet The Team</a></li>
-                <li><a href="#">What We Do</a></li>
-                <li><a href="#">Careers</a></li>
-            </ul>
-            <ul>
-                <li><h5>H.C.Luvrs</h5></li>
+                <li><h5>H.C.lovers</h5></li>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Meet The Team</a></li>
                 <li><a href="#">What We Do</a></li>

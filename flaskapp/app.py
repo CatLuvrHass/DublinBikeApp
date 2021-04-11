@@ -2,7 +2,7 @@ import pickle
 from functools import lru_cache
 
 import requests
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from jinja2 import Template
 from sqlalchemy import create_engine
 import dbinfo
@@ -101,32 +101,31 @@ def weather():
     return df.to_json(orient='records')
 
 
-def get_day(date):
-    # returns an interger between 0 and 6 depending on what day it is
-    d = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
-
-    day = calendar.day_name[dt.datetime.strptime(date, '%Y-%M-%d').weekday() - 1]
-
-    return d[day]
+pickle_in = open("models.pkl", "rb")
+models = pickle.load(pickle_in)
 
 
-@app.route("/st/<int:number>")
-def model(number, time=16, date="2021-04-16"):
-    # import model from pickle file. NOTE: number and time are ints, and date is a string
-    pickle_in = open("models.pkl", "rb")
-    models = pickle.load(pickle_in)
-    model = models[number][0]
+@app.route("/predict", methods=['POST'])
+def model():
+    if request.method == 'POST':
+        # number = request.form['station']
+        date = request.form['date']
+        time = request.form['hour']
+        # import model from pickle file. NOTE: number and time are ints, and date is a string
+        model = models[2][0]
 
-    # compute bikes available at this time
-    dic = weather_predict.weather_predict_data(date)
-    result = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
-    result = result[0]
+        # compute bikes available at this time
+        dic = weather_predict.weather_predict_data(date)
+        result = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
+        result = result[0]
 
-    # ensures prediction cannot be negitive
-    if result <= 0:
-        result = 0
+        # ensures prediction cannot be negitive
+        if result <= 0:
+            result = 0
 
-    return str(int(result))
+        pred = str(int(result))
+
+        return render_template('map.html', data=pred)
 
 
 if __name__ == '__main__':
