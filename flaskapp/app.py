@@ -2,7 +2,7 @@ import pickle
 from functools import lru_cache
 
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from jinja2 import Template
 from sqlalchemy import create_engine
 import dbinfo
@@ -101,31 +101,50 @@ def weather():
     return df.to_json(orient='records')
 
 
-pickle_in = open("models.pkl", "rb")
-models = pickle.load(pickle_in)
-
-
-@app.route("/predict", methods=['POST'])
+@app.route("/form", methods=['POST', 'GET'])
 def model():
     if request.method == 'POST':
-        # number = request.form['station']
-        date = request.form['date']
-        time = request.form['hour']
+        number = request.form['a']
+        date = request.form['b']
+        time = request.form['c']
         # import model from pickle file. NOTE: number and time are ints, and date is a string
-        model = models[2][0]
+        pickle_in = open("models.pkl", "rb")
+        models = pickle.load(pickle_in)
+        model = models[int(number)][0]
+        dic = weather_predict.weather_predict_data(date)
+        # dic = {'temp': 9.4, 'humidity': 50, 'day': 5}
+        pred = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
+        result = int(pred[0])
+
+        return render_template('map.html', data=result)
+        # return redirect(url_for("user", usr=result))
+    else:
+        return render_template('map.html')
+
+        # date = "2021-04-16"
+        # print(model)
 
         # compute bikes available at this time
-        dic = weather_predict.weather_predict_data(date)
-        result = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
-        result = result[0]
+        # dic = weather_predict.weather_predict_data(date)
+        #
+        # pred = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
+        # result = result[0]
 
         # ensures prediction cannot be negitive
-        if result <= 0:
-            result = 0
+        # if pred <= 0:
+        #     pred = 0
+        # print(pred)
 
-        pred = str(int(result))
+        # pred = str(int(result))
 
-        return render_template('map.html', data=pred)
+        # return render_template('map.html', data=str(pred))
+    # return render_template('map.html')
+
+
+# @app.route("/<usr>")
+# def user(usr):
+#     return render_template('predict.html', data=usr)
+    # return f"<h1>{usr}</h1>"
 
 
 if __name__ == '__main__':

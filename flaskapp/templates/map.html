@@ -181,7 +181,7 @@
     <div id="map"></div>
   </div>
 
-  <div id="rcorners2" class="flex-child green">
+  <div class="flex-child green">
       <div id="right-panel" class="panel">
       <h4>Total Distance: <span id="total"></span></h4>
   </div>
@@ -200,13 +200,19 @@
 <!--            document.getElementById("day").addEventListener("change", station);-->
 <!--            <select id="stations"></select>-->
 <!--        <option value="">Select a station</option>-->
-        <form method="POST" action="{{url_for('model')}}">
-<!--            station: <input type=number name="station" min="2" max="100"><br>-->
-        <label for="date">date:</label>
-            <input type="date" id="date" name="date">
-        hour: <input type=number name="hour" min="0" max="23"><br>
-        <input type=submit value="predict">
+
+        <form method=post action="{{url_for('model')}}">
+
+            station: <input type="number" name="a"><br>
+
+            date: <input type="date" id="date" name="b"><br>
+
+            hour: <input type="number" name="c"><br>
+
+            <input type=submit value="submit">
+
         </form>
+        My prediction: {{data}}
 
         <!--        <select id="dates"></select>-->
 <!--        <option value="">Select a date</option>-->
