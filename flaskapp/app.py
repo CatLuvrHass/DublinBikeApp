@@ -100,7 +100,7 @@ def weather():
 
 def get_day(date):
     # returns an interger between 0 and 6 depending on what day it is
-    d = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
+    d = {"Sunday": 6, "Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5}
 
     day = calendar.day_name[dt.datetime.strptime(date, '%Y-%M-%d').weekday() - 1]
 
