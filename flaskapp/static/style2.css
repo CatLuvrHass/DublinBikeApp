@@ -176,7 +176,7 @@ footer {
     padding: 0 10px;
     width: 1450px;
 }
-select {
+.select {
   width: 20%;
   margin: 0;
   font-size: 100%;

@@ -56,6 +56,7 @@
                     drawOccupancyWeekly(stations.number,stations.name);
                 });
             });
+            stationSelect();
 
             const bikeLayer = new google.maps.BicyclingLayer();
             bikeLayer.setMap(map);
@@ -132,30 +133,27 @@
             total = total / 1000;
             document.getElementById("total").innerHTML = total + " km";
         }
-                // function stationSelect(){
-        //
-        //     fetch("/stationList").then(result => {
-        //         return result.json();
-        //     }).then(another => {
-        //         // console.log("stations: ", another);
-        //     another.forEach(station =>{
-        //         // var Names=[];
-        //         // Names.push(station.name);
-        //         // console.log(Names);
-        //         // stationName.sort( (a, b) => a.localeCompare(b, 'eng', {ignorePunctuation: true}));
-        //
-        //         var originDropDown = document.getElementById("stations");
-        //         var opt = document.createElement("option");
-        //
-        //         opt.value= station.number;
-        //         // console.log(station.number);
-        //         opt.innerHTML = station.name;
-        //
-        //         originDropDown.add(opt);
-        //         });
-        //
-        //     });
-        // }
+        function stationSelect(){
+
+            fetch("/stationList").then(result => {
+                return result.json();
+            }).then(another => {
+                // console.log("stations: ", another);
+            another.forEach(station =>{
+
+                var originDropDown = document.getElementById("dropdown");
+                var opt = document.createElement("option");
+
+                opt.value= station.number;
+                // opt.setAttribute("stations", station.number);
+                // console.log(station.number);
+                opt.innerHTML = station.name;
+
+                originDropDown.add(opt);
+                });
+
+            });
+        }
 
     </script>
   </head>
@@ -165,8 +163,8 @@
         <h1>H<span class="color">.</span>C<span class="color">.</span>Lovers</h1>
         <nav>
             <ul>
-                <li><a href="http://127.0.0.1:5000/">Home</a></li>
-                <li><a href="http://127.0.0.1:5000/map">Route Map</a></li>
+                <li><a href="http://54.87.129.140/">Home</a></li>
+                <li><a href="http://54.87.129.140/map">Route Map</a></li>
             </ul>
 
         </nav>
@@ -195,31 +193,23 @@
     <div class="wrapper">
         <h3>Are you planning ahead?</h3>
         <p>Click on the markers to view usual usage of the station. Choose a day and time to plan a route for a trip with your mates in our beautiful Dublin. </p>
+
 <!--        document.getElementById("stations").addEventListener("change", station);-->
 
 <!--            document.getElementById("day").addEventListener("change", station);-->
-<!--            <select id="stations"></select>-->
-<!--        <option value="">Select a station</option>-->
 
         <form method=post action="{{url_for('model')}}">
 
-            station: <input type="number" name="a"><br>
+            <select class="select" id="dropdown" name="a"></select>
 
-            date: <input type="date" id="date" name="b"><br>
+            date: <input class="select" type="date" id="date" name="b">
 
-            hour: <input type="number" name="c"><br>
+            hour: <input class="select" type="number" name="c">
 
-            <input type=submit value="submit">
+            <input class="button-2" type=submit value="submit">
 
         </form>
         My prediction: {{data}}
-
-        <!--        <select id="dates"></select>-->
-<!--        <option value="">Select a date</option>-->
-
-<!--        <select id="months"></select>-->
-
-<!--        <select id="years"></select>-->
     </div>
   </div>
 

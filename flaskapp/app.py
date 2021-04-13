@@ -2,7 +2,7 @@ import pickle
 from functools import lru_cache
 
 import requests
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from jinja2 import Template
 from sqlalchemy import create_engine
 import dbinfo
@@ -101,12 +101,14 @@ def weather():
     return df.to_json(orient='records')
 
 
-@app.route("/form", methods=['POST', 'GET'])
+@app.route("/map", methods=['POST', 'GET'])
 def model():
     if request.method == 'POST':
+        # number = int(request.args.get('a'))
         number = request.form['a']
         date = request.form['b']
         time = request.form['c']
+        print(time, number, date)
         # import model from pickle file. NOTE: number and time are ints, and date is a string
         pickle_in = open("models.pkl", "rb")
         models = pickle.load(pickle_in)
@@ -144,7 +146,7 @@ def model():
 # @app.route("/<usr>")
 # def user(usr):
 #     return render_template('predict.html', data=usr)
-    # return f"<h1>{usr}</h1>"
+# return f"<h1>{usr}</h1>"
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0',port=8080)
+    app.run(port=5000, debug=True)
