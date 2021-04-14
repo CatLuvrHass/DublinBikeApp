@@ -119,34 +119,10 @@ def model():
         result = int(pred[0])
 
         return render_template('map.html', data=result)
-        # return redirect(url_for("user", usr=result))
+
     else:
         return render_template('map.html')
 
-        # date = "2021-04-16"
-        # print(model)
-
-        # compute bikes available at this time
-        # dic = weather_predict.weather_predict_data(date)
-        #
-        # pred = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
-        # result = result[0]
-
-        # ensures prediction cannot be negitive
-        # if pred <= 0:
-        #     pred = 0
-        # print(pred)
-
-        # pred = str(int(result))
-
-        # return render_template('map.html', data=str(pred))
-    # return render_template('map.html')
-
-
-# @app.route("/<usr>")
-# def user(usr):
-#     return render_template('predict.html', data=usr)
-# return f"<h1>{usr}</h1>"
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

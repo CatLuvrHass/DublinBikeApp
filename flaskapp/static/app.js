@@ -13,22 +13,22 @@ function initMap() {
 
     });
 
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            };
-
-            var originDropDown = document.getElementById("start");
-            var opt = document.createElement("option");
-
-            opt.value= [pos.lat, pos.lng];
-            opt.innerHTML = "User's Current Location";
-
-            originDropDown.add(opt);
-            // console.log(pos.lng);
-        });
+    // navigator.geolocation.getCurrentPosition(
+    //     (position) => {
+    //         const pos = {
+    //             lat: position.coords.latitude,
+    //             lng: position.coords.longitude,
+    //         };
+    //
+    //         var originDropDown = document.getElementById("start");
+    //         var opt = document.createElement("option");
+    //
+    //         opt.value= [pos.lat, pos.lng];
+    //         opt.innerHTML = "User's Current Location";
+    //
+    //         originDropDown.add(opt);
+    //         // console.log(pos.lng);
+    //     });
 
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -126,17 +126,11 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
 
 function citySelect(){
 
-    const start_ele = document.getElementById('start');
-    const end_ele = document.getElementById('end');
     fetch("/stationList").then(result => {
         return result.json();
     }).then(another => {
         // console.log("anotherone: ", another);
             another.forEach(station =>{
-                // var Names=[];
-                // Names.push(station.name);
-                // console.log(Names);
-                // stationName.sort( (a, b) => a.localeCompare(b, 'eng', {ignorePunctuation: true}));
 
                 var originDropDown = document.getElementById("start");
                 var opt = document.createElement("option");
@@ -144,16 +138,25 @@ function citySelect(){
                 opt.value= [station.pos_lat,station.pos_lng];
                 opt.innerHTML = station.name;
 
+
                 originDropDown.add(opt);
 
-                var originDropDown = document.getElementById("end");
+                var EndDropDown = document.getElementById("end");
                 var opt = document.createElement("option");
+
                 opt.value= [station.pos_lat,station.pos_lng];
                 opt.innerHTML = station.name;
 
-                originDropDown.add(opt);
+                EndDropDown.add(opt);
+
     });
     });
+    var originDropDown = document.getElementById("start");
+    var opt2 = document.createElement("option");
+
+    opt2.value= [53.349804, -6.260310];
+    opt2.innerHTML = "User's Current Location";
+    originDropDown.add(opt2);
 
 
 }

@@ -86,7 +86,6 @@ small {
     padding: 0 10px;
     width: 1100px;
 }
-/* class applies to select element itself, not a wrapper element */
 .select-css {
     display: block;
     font-size: 16px;
@@ -106,11 +105,28 @@ small {
     -webkit-appearance: none;
     appearance: none;
     background-color: #fff;
-    /* note: bg image below uses 2 urls. The first is an svg data uri for the arrow icon, and the second is the gradient.
-      for the icon, if you want to change the color, be sure to use `%23` instead of `#`, since it's a url. You can also swap in a different svg icon or an external image reference
-    */
 }
 
+select {
+  width: 40%;
+  margin: 0;
+  font-size: 100%;
+  padding: 5px 10px 5px 10px;
+  font-family: Segoe UI, Helvetica, sans-serif;
+  border: 0;
+  border: 1px solid #D0D0D0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+}
+select option {
+    text-transform: lowercase;
+}
+
+select, select option:checked {
+    text-transform: capitalize;
+}
 /*Header and nav bar styling section*/
 header {
     height: 120px;
@@ -396,3 +412,4 @@ footer {
     width: 200px;
     height: 150px;
 }
+
