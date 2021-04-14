@@ -79,9 +79,9 @@ def occupancy(station_id):
     where a.number = {}
     """.format(station_id)
     df = pd.read_sql_query(sel, engine)
-    # res_df = df.set_index('last_update').resample('1d').mean()
-    # res_df['last_update'] = res_df.index
-    return df.to_json(orient='records')
+    res_df = df.set_index('last_update').resample('1d').mean()
+    res_df['last_update'] = res_df.index
+    return res_df.to_json(orient='records')
 
 
 @app.route("/weather")
@@ -107,13 +107,17 @@ def model():
         # number = int(request.args.get('a'))
         number = request.form['a']
         date = request.form['b']
-        time = request.form['c']
+        hour = request.form['c']
+        array = hour.split(":")
+        time = int(array[0])
         print(time, number, date)
+
         # import model from pickle file. NOTE: number and time are ints, and date is a string
         pickle_in = open("models.pkl", "rb")
         models = pickle.load(pickle_in)
         model = models[int(number)][0]
         dic = weather_predict.weather_predict_data(date)
+
         # dic = {'temp': 9.4, 'humidity': 50, 'day': 5}
         pred = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
         result = int(pred[0])

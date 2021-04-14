@@ -109,7 +109,6 @@ small {
 
 select {
   width: 40%;
-  margin: 0;
   font-size: 100%;
   padding: 5px 10px 5px 10px;
   font-family: Segoe UI, Helvetica, sans-serif;
@@ -121,7 +120,7 @@ select {
   outline: none;
 }
 select option {
-    text-transform: lowercase;
+    text-transform: capitalize;
 }
 
 select, select option:checked {

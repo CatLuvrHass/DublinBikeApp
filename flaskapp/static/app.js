@@ -138,7 +138,6 @@ function citySelect(){
                 opt.value= [station.pos_lat,station.pos_lng];
                 opt.innerHTML = station.name;
 
-
                 originDropDown.add(opt);
 
                 var EndDropDown = document.getElementById("end");

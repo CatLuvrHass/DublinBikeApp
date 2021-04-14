@@ -190,7 +190,9 @@
   <div id="cta">
     <div class="wrapper">
         <h3>Are you planning ahead?</h3>
-        <p>Click on the markers to view usual usage of the station. Choose a day and time to plan a route for a trip with your mates in our beautiful Dublin. </p>
+        <p>Click on the markers to view usual usage of the station.<br><br>
+            Choose a date and time to plan for a future trip with your mates in our beautiful Dublin.<br>
+        Our prediction model works for up to 7 days ahead with your inputted hour.</p>
 
 <!--        document.getElementById("stations").addEventListener("change", station);-->
 
@@ -202,12 +204,12 @@
 
             date: <input class="select" type="date" id="date" name="b">
 
-            hour: <input class="select" type="number" name="c">
+            hour: <input type="time" name="c">
 
-            <input class="button-2" type=submit value="submit">
+            <input class="button-2" type=submit value="Submit">
 
-        </form>
-        My prediction: {{data}}
+        </form><br><br>
+        <h5>Number of bikes predicted: {{data}}</h5>
     </div>
   </div>
 
