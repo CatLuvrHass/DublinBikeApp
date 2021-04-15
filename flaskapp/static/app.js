@@ -13,22 +13,24 @@ function initMap() {
 
     });
 
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            };
-
-            var originDropDown = document.getElementById("start");
-            var opt = document.createElement("option");
-
-            opt.value= [pos.lat, pos.lng];
-            opt.innerHTML = "User's Current Location";
-
-            originDropDown.add(opt);
-            // console.log(pos.lng);
-        });
+    //this is the code for adding current location of the user into the drop list but it is commented out since we dont have
+        // the website running on https yet.
+    // navigator.geolocation.getCurrentPosition(
+    //     (position) => {
+    //         const pos = {
+    //             lat: position.coords.latitude,
+    //             lng: position.coords.longitude,
+    //         };
+    //
+    //         var originDropDown = document.getElementById("start");
+    //         var opt = document.createElement("option");
+    //
+    //         opt.value= [pos.lat, pos.lng];
+    //         opt.innerHTML = "User's Current Location";
+    //
+    //         originDropDown.add(opt);
+    //         // console.log(pos.lng);
+    //     });
 
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -88,7 +90,7 @@ function initMap() {
         marker.addListener("click", () => {
             const infowindow = new google.maps.InfoWindow({
 
-                content: '<h3>'+stations.name+'</h3><p> Available Stands: '+stations.available_bike_stands+
+                content: '<h5>'+stations.name+'</h5><p> Available Stands: '+stations.available_bike_stands+
                 '<br>Available Bikes: '+stations.available_bikes+'</p>',
 
             });
@@ -126,17 +128,11 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
 
 function citySelect(){
 
-    const start_ele = document.getElementById('start');
-    const end_ele = document.getElementById('end');
     fetch("/stationList").then(result => {
         return result.json();
     }).then(another => {
         // console.log("anotherone: ", another);
             another.forEach(station =>{
-                // var Names=[];
-                // Names.push(station.name);
-                // console.log(Names);
-                // stationName.sort( (a, b) => a.localeCompare(b, 'eng', {ignorePunctuation: true}));
 
                 var originDropDown = document.getElementById("start");
                 var opt = document.createElement("option");
@@ -146,15 +142,23 @@ function citySelect(){
 
                 originDropDown.add(opt);
 
-                var originDropDown = document.getElementById("end");
+                var EndDropDown = document.getElementById("end");
                 var opt = document.createElement("option");
+
                 opt.value= [station.pos_lat,station.pos_lng];
                 opt.innerHTML = station.name;
 
-                originDropDown.add(opt);
+                EndDropDown.add(opt);
+
     });
     });
 
+    var originDropDown = document.getElementById("start");
+    var opt2 = document.createElement("option");
+
+    opt2.value= [53.349804, -6.260310];
+    opt2.innerHTML = "User's Current Location";
+    originDropDown.add(opt2);
 
 }
 
@@ -185,7 +189,8 @@ function weatherBallon(){
          return weatherData;
      })
          .then(function(weatherData){
-              weather.temperature = weatherData[0].temp;
+
+              weather.temperature = parseInt(weatherData[0].temp);
              weather.description = weatherData[0].description;
             weather.iconId = weatherData[0].icon;
              weather.windSpeed = weatherData[0].wind_speed;

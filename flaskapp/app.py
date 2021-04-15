@@ -2,7 +2,7 @@ import pickle
 from functools import lru_cache
 
 import requests
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, session
 from jinja2 import Template
 from sqlalchemy import create_engine
 import dbinfo
@@ -13,6 +13,9 @@ import time
 import requests
 import datetime as dt
 import calendar
+import weather_predict
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
 app = Flask(__name__, template_folder='templates')
 
@@ -76,9 +79,9 @@ def occupancy(station_id):
     where a.number = {}
     """.format(station_id)
     df = pd.read_sql_query(sel, engine)
-    # res_df = df.set_index('last_update').resample('1d').mean()
-    # res_df['last_update'] = res_df.index
-    return df.to_json(orient='records')
+    res_df = df.set_index('last_update').resample('1d').mean()
+    res_df['last_update'] = res_df.index
+    return res_df.to_json(orient='records')
 
 
 @app.route("/weather")
@@ -98,57 +101,34 @@ def weather():
     return df.to_json(orient='records')
 
 
-def get_day(date):
-    # returns an interger between 0 and 6 depending on what day it is
-    d = {"Sunday": 6, "Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5}
 
-    day = calendar.day_name[dt.datetime.strptime(date, '%Y-%M-%d').weekday() - 1]
-
-    return d[day]
-
-
-@app.route("/weatherDic/<int:date>")
-def weather_predict_data(date):
-    # gets weather predictions for the next week, as well as the day as an int (see above)
-    '''Uses open weather API to get current weather'''
-    url = 'https://api.openweathermap.org/data/2.5/onecall?lat=53.3498&lon=6.2603&exclude=hourly&appid=59134ab26e3f2ded62e1e2b6e3c08c21&units=metric'
-
-    r = requests.get(url)
-    weather_data = r.json()['daily']
-
-    # default results (if maing call outside of 1 week)
-    dic = {'t': 0, 'h': 0, 'd': 0}
-
-    for i in weather_data:
-        if (dt.datetime.utcfromtimestamp(i["dt"]).strftime('%Y-%m-%d') == date):
-            t = i['temp']['day']
-            h = i['humidity']
-            date_str = dt.datetime.utcfromtimestamp(i["dt"]).strftime('%Y-%m-%d')
-            d = get_day(date_str)
-
-            dic = {'t': t, 'h': h, 'd': d}
-            break
-    return dic
+@app.route("/map", methods=['POST', 'GET'])
+def model():
+    if request.method == 'POST':
+        # number = int(request.args.get('a'))
+        number = request.form['a']
+        date = request.form['b']
+        hour = request.form['c']
+        array = hour.split(":")
+        time = int(array[0])
+        print(time, number, date)
 
 
-# weather_data = weather_predict_data("2021-04-16")
-# print(weather_data)
+        # import model from pickle file. NOTE: number and time are ints, and date is a string
+        pickle_in = open("models.pkl", "rb")
+        models = pickle.load(pickle_in)
+        model = models[int(number)][0]
+        dic = weather_predict.weather_predict_data(date)
 
+        # dic = {'temp': 9.4, 'humidity': 50, 'day': 5}
+        pred = model.predict([np.array([time, dic['day'], dic['humidity'], dic['temp']])])
+        result = int(pred[0])
 
-@app.route("/st/<int:number>")
-def model(number):
-    pickle_in = open("models.pkl", "rb")
-    models = pickle.load(pickle_in)
+        return render_template('map.html', data=result)
 
-    hour = 12
-    dic = {'t': 12, 'humid': 80, 'd': 3}
-    inter = models[number][1]
-    coef = models[number][0]
-    result = inter + (hour * coef[0]) + (dic['d'] * coef[1]) + (dic['humid'] * coef[2]) + (
-            dic['t'] * coef[3])
-
-    return str(result)  # A float which we display.
+    else:
+        return render_template('map.html')
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)

@@ -46,7 +46,7 @@
                 marker.addListener("click", () => {
                     const infowindow = new google.maps.InfoWindow({
 
-                    content: '<h3 style="color:black;">'+stations.name+'</h3>' +
+                    content: '<h5 style="color:black;">'+stations.name+'</h5>' +
                         '<p style="color:black;"> Available Stands: '
                         +stations.available_bike_stands+
                         '<br>Available Bikes: '
@@ -56,6 +56,7 @@
                     drawOccupancyWeekly(stations.number,stations.name);
                 });
             });
+            stationSelect();
 
             const bikeLayer = new google.maps.BicyclingLayer();
             bikeLayer.setMap(map);
@@ -132,6 +133,27 @@
             total = total / 1000;
             document.getElementById("total").innerHTML = total + " km";
         }
+        function stationSelect(){
+
+            fetch("/stationList").then(result => {
+                return result.json();
+            }).then(another => {
+                // console.log("stations: ", another);
+            another.forEach(station =>{
+
+                var originDropDown = document.getElementById("dropdown");
+                var opt = document.createElement("option");
+
+                opt.value= station.number;
+                // opt.setAttribute("stations", station.number);
+                // console.log(station.number);
+                opt.innerHTML = station.name;
+
+                originDropDown.add(opt);
+                });
+
+            });
+        }
 
     </script>
   </head>
@@ -141,15 +163,13 @@
         <h1>H<span class="color">.</span>C<span class="color">.</span>Lovers</h1>
         <nav>
             <ul>
-                <li><a href="http://127.0.0.1:5000/">Home</a></li>
-                <li><a href="http://127.0.0.1:5000/map">Route Map</a></li>
+                <li><a href="http://54.87.129.140:5000/">Home</a></li>
+                <li><a href="http://54.87.129.140:5000/map">Route Map</a></li>
             </ul>
 
         </nav>
     </div>
 </header>
-
-
 
   <div class="flex-container">
 
@@ -157,7 +177,7 @@
     <div id="map"></div>
   </div>
 
-  <div id="rcorners2" class="flex-child green">
+  <div class="flex-child green">
       <div id="right-panel" class="panel">
       <h4>Total Distance: <span id="total"></span></h4>
   </div>
@@ -170,26 +190,45 @@
   <div id="cta">
     <div class="wrapper">
         <h3>Are you planning ahead?</h3>
-        <p>Click on the markers to view usual usage of the station. Choose a day and time to plan a route for a trip with your mates in our beautiful Dublin. </p>
+        <p>Click on the markers to view usual usage of the station.<br><br>
+            Choose a date and time to plan for a future trip with your mates in our beautiful Dublin.<br>
+        Our prediction model works for up to 7 days ahead with your inputted hour.</p>
+
+<!--        document.getElementById("stations").addEventListener("change", station);-->
+
+<!--            document.getElementById("day").addEventListener("change", station);-->
+
+        <form method=post action="{{url_for('model')}}">
+
+            <select class="select" id="dropdown" name="a"></select>
+
+            date: <input class="select" type="date" id="date" name="b">
+
+            hour: <input type="time" name="c">
+
+            <input class="button-2" type=submit value="Submit">
+
+        </form><br><br>
+        <h5>Number of bikes predicted: {{data}}</h5>
     </div>
   </div>
 
  <footer>
     <div class="wrapper">
         <div id="footer-info">
-            <p>Copyright 2021 D.Bois. All rights reserved.</p>
+            <p>Copyright 2021 H.C.Lovers. All rights reserved.</p>
             <p><a href="#">Terms of Service</a> I <a href="#">Privacy</a></p>
         </div>
         <div id="footer-links">
             <ul>
-                <li><h5>D.Bois</h5></li>
+                <li><h5>D.GANG</h5></li>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Meet The Team</a></li>
                 <li><a href="#">What We Do</a></li>
                 <li><a href="#">Careers</a></li>
             </ul>
             <ul>
-                <li><h5>H.C.Luvrs</h5></li>
+                <li><h5>H.C.lovers</h5></li>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Meet The Team</a></li>
                 <li><a href="#">What We Do</a></li>
