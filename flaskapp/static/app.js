@@ -88,7 +88,7 @@ function initMap() {
         marker.addListener("click", () => {
             const infowindow = new google.maps.InfoWindow({
 
-                content: '<h3>'+stations.name+'</h3><p> Available Stands: '+stations.available_bike_stands+
+                content: '<h5>'+stations.name+'</h5><p> Available Stands: '+stations.available_bike_stands+
                 '<br>Available Bikes: '+stations.available_bikes+'</p>',
 
             });
@@ -150,13 +150,13 @@ function citySelect(){
 
     });
     });
+
     var originDropDown = document.getElementById("start");
     var opt2 = document.createElement("option");
 
     opt2.value= [53.349804, -6.260310];
     opt2.innerHTML = "User's Current Location";
     originDropDown.add(opt2);
-
 
 }
 
@@ -187,7 +187,8 @@ function weatherBallon(){
          return weatherData;
      })
          .then(function(weatherData){
-              weather.temperature = weatherData[0].temp;
+
+              weather.temperature = parseInt(weatherData[0].temp);
              weather.description = weatherData[0].description;
             weather.iconId = weatherData[0].icon;
              weather.windSpeed = weatherData[0].wind_speed;
