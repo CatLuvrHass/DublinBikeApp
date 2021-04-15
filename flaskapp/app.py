@@ -22,29 +22,36 @@ app = Flask(__name__, template_folder='templates')
 
 @app.route('/')
 def index():
+    # access to the home page (index.html in templates folder)
     return render_template("index.html")
 
 
 @app.route('/map')
 def map():
+    #access to the map page (map.html in templates folder)
     return render_template("map.html")
 
 
 @app.route("/stations")
 @lru_cache()
 def stations():
+    #The objective of this function is to return the most recent occupancy figures releated to each station
+    
+    #access staions and availability tables in the main database (dbikes1)
     URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
     DB = "dbikes1"
     name = dbinfo.USER
     pw = dbinfo.PASS
 
     engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name, pw, URI, DB), echo=True)
-
+    
+    #joins the staions table with the availability table, returning a list of station numbers and their most recent availability figures
     join = """SELECT s.number, s.name, s.address,s.pos_lat,s.pos_lng,a.available_bike_stands, a.available_bikes, a.last_update
         FROM stations s 
         JOIN availability a ON (a.number = s.number)
         ORDER BY a.last_update desc LIMIT 200
         """
+    
     df = pd.read_sql_query(join, engine)
     dfn = df.drop_duplicates(subset=['number'])
 
@@ -54,6 +61,8 @@ def stations():
 @app.route("/stationList")
 @lru_cache()
 def stations2():
+    #returns a list of stations and their coordinates
+    #access database
     URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
     DB = "dbikes1"
     name = dbinfo.USER
@@ -70,6 +79,7 @@ def stations2():
 @app.route("/occupancy/<int:station_id>")
 @lru_cache()
 def occupancy(station_id):
+    #returns an average occupancy per day for a station passed using station_id
     URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
     DB = "dbikes1"
     name = dbinfo.USER
@@ -87,6 +97,7 @@ def occupancy(station_id):
 
 @app.route("/weather")
 def weather():
+    #returns the latest weather prediction figures
     URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
     DB = "dbikes1"
     name = dbinfo.USER
@@ -104,6 +115,7 @@ def weather():
 
 @app.route("/map", methods=['POST', 'GET'])
 def model():
+    #returns the predicted occupancy for a certain station based on the parameters passed by the user
     if request.method == 'POST':
         # number = int(request.args.get('a'))
         number = request.form['a']
@@ -128,5 +140,6 @@ def model():
     else:
         return render_template('map.html')
 
+#run the application on the server using port 5000
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
