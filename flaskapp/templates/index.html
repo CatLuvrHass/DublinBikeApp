@@ -2,26 +2,136 @@
 
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Flask app</title>
-    <meta name="description" content="first index.html">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Dublin Bikes</title>
+    <link href='http://fonts.googleapis.com/css?family=Crete+Round' rel='stylesheet' type='text/css'>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <meta name="author" content="Handsomecatlovers">
-    <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename= 'reset.css') }}" rel="stylesheet" type="text/css" href="static/reset.css">
+    <link href="{{ url_for('static', filename= 'style.css') }}" rel="stylesheet" type="text/css" href="static/style.css">
+   <!-- <link rel="stylesheet" href="/static/font/Rimouski.css"> -->
         <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
 
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
 
 <body>
 
+<header>
+    <div class="wrapper">
+        <h1>H<span class="color">.</span>C<span class="color">.</span>Lovers</h1>
+        <nav>
+            <ul>
+                <li><a href="http://54.87.129.140:5000/">Home</a></li>
+                <li><a href="http://127.0.0.1:5000//map">Route Map</a></li>
+<!--                <li><a href="http://54.87.129.140:5000/map">Route Map</a></li>-->
+            </ul>
 
-<div id="header"></div>
-<div id="map"></div>
+        </nav>
+    </div>
+</header>
 
-    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script
+<div id="hero-image">
+    <div class="wrapper">
+        <h2><strong>Bikes in Dublin,</strong><br/>
+        for u & your mates.</h2>
+    </div>
+</div>
+
+<div id="features">
+    <div class="wrapper">
+        <ul>
+            <li class="feature-1">
+                <h4>Easy to Use</h4>
+            </li>
+            <li style="padding-top: 0px">
+<div class="container">
+    <div class="app-title"><p>Weather</p></div>
+    <div class="notification"></div>
+    <div class="weather-container">
+        <div class="weather-icon">
+          <img src="../static/icons/unknown.png" height="128" width="128" alt="">
+        </div>
+        <div class="temperature-value"><p>- °<span>C</span></p></div>
+        <div class="temperature-description"><p> - </p></div>
+        <div class="location"><p>-</p></div>
+    </div>
+</div>
+            </li>
+            <li class="feature-3">
+                <h4>Ready to Go</h4>
+            </li>
+            <div class="clear"></div>
+        </ul>
+
+    </div>
+</div>
+
+
+<div class="wrapper">
+     <div id="floating-panel" class="select-css">
+         <h3>quick directions map</h3>
+      <b>Start: </b>
+      <select id="start">
+        <option value="">Select a beginning(user's location inc)</option>
+      </select>
+      <b>End: </b>
+      <select id="end">
+        <option value="">Select a destination</option>
+      </select>
+    </div>
+
+    <div id="map" id="rcorners2">map should appear here</div>
+</div>
+
+    <div id="cta">
+    <div class="wrapper">
+        <h3>Are you Ready?</h3>
+        <p>Check out our planner page, plan a route for a trip with your mates in our beautiful Dublin. </p>
+        <a href="http://54.87.129.140:5000/map" class="button-2">Get Started</a>
+    </div>
+</div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+
+    <footer>
+    <div class="wrapper">
+        <div id="footer-info">
+            <p>Copyright 2021 H.C.Lovers. All rights reserved.</p>
+            <p><a href="#">Terms of Service</a> I <a href="#">Privacy</a></p>
+        </div>
+        <div id="footer-links">
+                        <ul>
+                            <li><h5>D.GANG</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>H.C.Lovers</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+            <ul>
+                <li><h5>1.9.9.5</h5></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Meet The Team</a></li>
+                <li><a href="#">What We Do</a></li>
+                <li><a href="#">Careers</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+</footer>
+
+
+        <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+<script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAorOsfqUWbmtgaEbaERaXAKKGBpMoegfk&callback=initMap&libraries=&v=weekly"
       async
     ></script>
+
 </body>
 </html>

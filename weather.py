@@ -48,7 +48,8 @@ weather = sqla.Table(
     sqla.Column('sun_set', sqla.DateTime),
     sqla.Column('pressure', sqla.Integer),
     sqla.Column('humidity', sqla.Integer),
-    sqla.Column('last_update', sqla.DateTime))
+    sqla.Column('last_update', sqla.DateTime),
+    sqla.Column('icon', sqla.String(128)))
 
 #function that returns objects from the json file as database values that fit 
 #into corresponding data base column
@@ -64,7 +65,8 @@ def get_weather(obj):
             'sun_set': datetime.datetime.fromtimestamp(obj['sys']['sunset']),
             'pressure': obj['main']['pressure'],
             'humidity': obj['main']['humidity'],
-            'last_update': datetime.datetime.now()}
+            'last_update': datetime.datetime.now(),
+            "icon": obj['weather'][0]['icon']}
 
 def weather_data():
     '''Uses open weather API to get current weather'''

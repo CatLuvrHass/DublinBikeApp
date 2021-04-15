@@ -1,4 +1,4 @@
- 
+
 import requests
 import json
 import simplejson as json
@@ -27,6 +27,9 @@ def main():
         r = requests.get(url, params={"apiKey":apikey,"contract": name})
         data = json.loads(r.text)
         
+        """Store the inital data in Json file"""
+        current_time = datetime.datetime.now()
+        filename = 'data_{}.json'.format(current_time).replace(" ","_").replace(":","_")
         
         """Uplaod station data to database"""
         store(r)
@@ -47,7 +50,11 @@ def main():
             """update databases and store information"""
             data = json.loads(r.text)
             
-            
+            """Store the inital data in Json file"""
+            current_time = datetime.datetime.now()
+            filename = 'data_{}.json'.format(current_time).replace(" ","_").replace(":","_")
+            store_data_json(data,filename)
+
             # write to the database
             store2(r)
         
@@ -56,6 +63,14 @@ def main():
         except:
             print(traceback.format_exc())
         
+    return
+
+
+def store_data_json(data,filename):
+    '''uploads the data to a json file called data_[X] where X is the time the json file was pulled from the API'''
+    with open(filename,'w') as f:
+        f.write(str(data))
+    return
 
 #returns values in sqlachemy object for static table
 def get_station(obj):
@@ -146,5 +161,4 @@ available = sqla.Table(
         sqla.Column('available_bikes', sqla.Integer),
         sqla.Column('last_update', sqla.DateTime))
 
-if __main__ == '__main__':
-    main()
+main()
