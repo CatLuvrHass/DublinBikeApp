@@ -13,6 +13,8 @@ function initMap() {
 
     });
 
+    //this is the code for adding current location of the user into the drop list but it is commented out since we dont have
+        // the website running on https yet.
     // navigator.geolocation.getCurrentPosition(
     //     (position) => {
     //         const pos = {
