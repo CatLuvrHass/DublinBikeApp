@@ -101,6 +101,7 @@ def weather():
     return df.to_json(orient='records')
 
 
+
 @app.route("/map", methods=['POST', 'GET'])
 def model():
     if request.method == 'POST':
@@ -111,6 +112,7 @@ def model():
         array = hour.split(":")
         time = int(array[0])
         print(time, number, date)
+
 
         # import model from pickle file. NOTE: number and time are ints, and date is a string
         pickle_in = open("models.pkl", "rb")
@@ -129,4 +131,4 @@ def model():
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
