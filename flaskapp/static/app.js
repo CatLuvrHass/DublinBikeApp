@@ -1,8 +1,10 @@
 let map;
 
-
+//main function
 function initMap() {
 
+    // fetching information from stations app.py flask page
+    // to add to the directions map information, markers locations and info windows.
     fetch("/stations").then(response => {
         return response.json();
 
@@ -32,17 +34,24 @@ function initMap() {
     //         // console.log(pos.lng);
     //     });
 
+        // direction service values and set onto the map
     const directionsService = new google.maps.DirectionsService();
     const directionsRenderer = new google.maps.DirectionsRenderer();
     directionsRenderer.setMap(map);
 
+    // function call on the cal of route when an event listener sees a change in the
+        // drop lists for the stations of end and start
     const onChangeHandler = function () {
     calculateAndDisplayRoute(directionsService, directionsRenderer);
     };
     document.getElementById("start").addEventListener("change", onChangeHandler);
     document.getElementById("end").addEventListener("change", onChangeHandler);
+
+    //the list is initialised
     citySelect();
 
+    // this for loop is used to create and style the circles around the markers
+        // they are a tell for how many bikes are available.
     data.forEach(stations => {
         if(stations.available_bikes > 5){
             let cityCircleAvail = new google.maps.Circle({
@@ -78,7 +87,7 @@ function initMap() {
               radius: 50,
             });
         }
-
+        //this is where the station markers is defined and styled
         const marker = new google.maps.Marker({
             position: { lat: stations.pos_lat, lng: stations.pos_lng },
             map: map,
@@ -104,7 +113,8 @@ function initMap() {
     });
 }
 
-
+// this function is from the google apo and it takes care of the query of calculating the distance
+// between the start and end chosen values.
 function calculateAndDisplayRoute(directionsService, directionsRenderer) {
   directionsService.route(
     {
@@ -126,6 +136,8 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer) {
   );
 }
 
+// this function work with stationlist page from flask app.py where the query requests
+// the station names in alphabetical order and it populates the end and start list.
 function citySelect(){
 
     fetch("/stationList").then(result => {
@@ -152,6 +164,8 @@ function citySelect(){
 
     });
     });
+    // the current location is hardcoded here since the website is not over https yet
+    // the code to populate the geolocation of the user is above in initMap() function.
 
     var originDropDown = document.getElementById("start");
     var opt2 = document.createElement("option");

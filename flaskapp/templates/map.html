@@ -16,12 +16,18 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         let map;
+
+        // chart initialise function
         function initCharts() {
             google.charts.load('current',{'packages':['corechart']});
             google.charts.setOnLoadCallback(initMap);
         }
+
+        // main map initialise function
         function initMap() {
 
+
+            // fetching the same data in index page to populate a similar map.
           fetch("/stations").then(response => {
             return response.json();
 
@@ -43,6 +49,8 @@
 
                     icon: {url: "http://maps.google.com/mapfiles/ms/icons/pink-dot.png"}
             });
+                //marker listenr tha calls for the info window and
+                // for graphs to appear.
                 marker.addListener("click", () => {
                     const infowindow = new google.maps.InfoWindow({
 
@@ -56,10 +64,16 @@
                     drawOccupancyWeekly(stations.number,stations.name);
                 });
             });
+            // this function is similar to city select index
+              // it will populate the station select menu for prediction.
             stationSelect();
 
+            // This is the bike layer filter.
             const bikeLayer = new google.maps.BicyclingLayer();
             bikeLayer.setMap(map);
+
+            // This is to add the draggable feature
+              // code it refactored from google api to work for dublin
             const directionsService = new google.maps.DirectionsService();
             const directionsRenderer = new google.maps.DirectionsRenderer({
                 draggable: true,
@@ -81,6 +95,7 @@
           });
 
         }
+        // function to draw the charts
         function drawOccupancyWeekly(station_number,name){
             fetch("/occupancy/"+station_number).then(response => {
                 return response.json();
@@ -100,6 +115,8 @@
                 chart.draw(chart_data, options);
             });
         }
+
+        // draggable route display
         function displayRoute(origin, destination, service, display) {
             service.route(
                 {
@@ -120,6 +137,8 @@
                 }
                 );
         }
+
+        // calculate the length of the distance
         function computeTotalDistance(result) {
             let total = 0;
             const myroute = result.routes[0];
@@ -133,6 +152,8 @@
             total = total / 1000;
             document.getElementById("total").innerHTML = total + " km";
         }
+
+        // station select function populate a list.
         function stationSelect(){
 
             fetch("/stationList").then(result => {

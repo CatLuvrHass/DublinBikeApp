@@ -7,6 +7,10 @@ body {
   padding: 0;
 }
 
+/*Body, paragraphs, headings styling section much of the code for the style and html minimal layout is from
+ https://medialoot.com/blog/how-to-code-a-homepage-template-with-html5-and-css3/ the design is highly inspired
+ by this and is modified where is felt necessary and suited.*/
+
 body {
     background-color: #fff;
     color: #777;
@@ -71,6 +75,8 @@ strong {
     width: 1100px;
 }
 
+/*header styling section*/
+
 header {
     height: 120px;
 }
@@ -98,6 +104,9 @@ header nav ul li a {
     display: block;
     margin-right: 20px;
 }
+
+/*call to action styling section*/
+
 #cta {
     padding: 60px 0;
     text-align: center;
@@ -109,6 +118,8 @@ header nav ul li a {
     border-bottom: 1px solid #F08080;
     padding: 0 0 20px 0;
 }
+
+/*footer styling section*/
 
 footer {
     padding: 60px 0;
