@@ -1,5 +1,5 @@
 # git_for_dbikes
-# URL to access the website: 54.87.129.140:5000
+
 
 This is an explanation of each file in the main repository:
 
