@@ -18,7 +18,7 @@ def weather_predict_data(date):
     # gets weather predictions for the next week, as well as the day as an int (see above)
     '''Uses open weather API to get current weather'''
     url = 'https://api.openweathermap.org/data/2.5/onecall?lat=53.3498&lon=6.2603&exclude=minutely&appid' \
-          '=59134ab26e3f2ded62e1e2b6e3c08c21&units=metric'
+          '={YOUR_API_KEY}&units=metric'
 
     r = requests.get(url)
     weather_data = r.json()['daily']

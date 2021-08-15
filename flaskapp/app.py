@@ -38,8 +38,8 @@ def stations():
     #The objective of this function is to return the most recent occupancy figures releated to each station
     
     #access staions and availability tables in the main database (dbikes1)
-    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
-    DB = "dbikes1"
+    URI = dbinfo.DBURI
+    DB = dbinfo.DBNAME
     name = dbinfo.USER
     pw = dbinfo.PASS
 
@@ -63,8 +63,8 @@ def stations():
 def stations2():
     #returns a list of stations and their coordinates
     #access database
-    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
-    DB = "dbikes1"
+    URI = dbinfo.DBURI
+    DB = dbinfo.DBNAME
     name = dbinfo.USER
     pw = dbinfo.PASS
     engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name, pw, URI, DB), echo=True)
@@ -80,8 +80,8 @@ def stations2():
 @lru_cache()
 def occupancy(station_id):
     #returns an average occupancy per day for a station passed using station_id
-    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
-    DB = "dbikes1"
+    URI = dbinfo.DBURI
+    DB = dbinfo.DBNAME
     name = dbinfo.USER
     pw = dbinfo.PASS
     engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name, pw, URI, DB), echo=True)
@@ -98,8 +98,8 @@ def occupancy(station_id):
 @app.route("/weather")
 def weather():
     #returns the latest weather prediction figures
-    URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
-    DB = "dbikes1"
+    URI = dbinfo.DBURI
+    DB = dbinfo.DBNAME
     name = dbinfo.USER
     pw = dbinfo.PASS
     engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name, pw, URI, DB), echo=True)

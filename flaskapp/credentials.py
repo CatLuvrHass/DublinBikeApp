@@ -1,2 +1,2 @@
-name = "chris01"
-password = "Cd4936234"
+name = "USEER_NAME"
+password = "DB_PASS"

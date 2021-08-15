@@ -20,8 +20,7 @@ def main():
     
     try:
         """information required to access api"""
-        apikey = "86e256748a1872c27d81d7f54516d214b19faa8e"
-        #also f570f2a1ccb689ea7b7ba8a4f9129743ed853448 is available
+        apikey = "JCDecaux_API_KEY"
         name = "Dublin"
         url= "https://api.jcdecaux.com/vls/v1/stations"
         r = requests.get(url, params={"apiKey":apikey,"contract": name})
@@ -39,7 +38,7 @@ def main():
     while True:
         try:
             """information required to access api"""
-            apikey = "86e256748a1872c27d81d7f54516d214b19faa8e"
+            apikey = "JCDecaux_API_KEY"
             name = "Dublin"
             url= "https://api.jcdecaux.com/vls/v1/stations"
             r = requests.get(url, params={"apiKey":apikey,"contract": name})
@@ -77,10 +76,10 @@ def get_availability(obj):
 #function to execute storage of data into db for static table
 def store(r):
     try:
-        URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
-        DB = "dbikes1"
-        name = credentials.name
-        pw = credentials.password
+        URI = "DB_URI"
+        DB = "DB_NAME"
+        name = credentials.USER
+        pw = credentials.PASS
 
         """Initate connection"""
         engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name,pw,URI,DB),echo=True)
@@ -104,15 +103,13 @@ def store(r):
 def store2(r):
     try:
         '''Store availability data'''
-        URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
-        DB = "dbikes1"
-        name = credentials.name
-        pw = credentials.password
+        URI = "DB_URI"
+        DB = "DB_NAME"
+        name = credentials.USER
+        pw = credentials.PASS
 
         """Initate connection"""
         engine = create_engine("mysql+mysqlconnector://{}:{}@{}:3306/{}".format(name,pw,URI,DB),echo=True)
-        #drop = "DROP TABLE IF EXISTS availability"
-        #engine.execute("DELETE FROM availability")
         
         '''Insert values from json file into availability table'''
         metadata.create_all(engine)

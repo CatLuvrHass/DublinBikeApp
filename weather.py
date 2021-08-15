@@ -70,7 +70,7 @@ def get_weather(obj):
 
 def weather_data():
     '''Uses open weather API to get current weather'''
-    url = 'http://api.openweathermap.org/data/2.5/weather?q=Rathfarnham&units=metric&appid=59134ab26e3f2ded62e1e2b6e3c08c21'
+    url = 'http://api.openweathermap.org/data/2.5/weather?q=Rathfarnham&units=metric&appid={YOUR_API_KEY}'
 
     r = requests.get(url)
     weather_data = r.json()
@@ -82,8 +82,8 @@ def weather_data():
 def store3(data):
     try:
 
-        URI = "dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com"
-        DB = "dbikes1"
+        URI = "DB_URI"
+        DB = "DB_NAME"
         name = credentials.name
         pw = credentials.password
 

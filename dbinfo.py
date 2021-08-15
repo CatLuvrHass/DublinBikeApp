@@ -1,5 +1,4 @@
-USER = 'chris01'
-PASS = 'Cd4936234'
-DBURI = 'dublinbikeappdb.cxaxe40vwlui.us-east-1.rds.amazonaws.com'
-DBNAME = 'dbikes1'
-
+USER = 'USER_NAME'
+PASS = 'DB_PASS'
+DBURI = 'DB_URI'
+DBNAME = 'DB_NAME'
